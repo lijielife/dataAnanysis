@@ -72,7 +72,7 @@ export default {
         },
         logoUrl: { // 品牌logo
             type: String,
-            default: 'https://pic.51zhangdan.com/u51/storage/5e/5c7f3c4b-e6e7-a214-afbe-dd4be195834e.png',
+            default: 'https://51nbimg.u51.com/c2548d68e3e344fc9b9363fc20cbf1cb.png',
         },
         systemName: { // 系统名称
             type: String,

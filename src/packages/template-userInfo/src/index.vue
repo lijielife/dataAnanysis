@@ -1,10 +1,3 @@
-/**
- * @file index.vue
- * @description 用户信息组件
- * @author xurenjie
- * @createAt 2017-11-07
- * ps: 1. nb-menu-item绑定原生事件可以用 v-on:click.native
- */
 <template>
   <div class="user-info">
     <div id="user-info__area">

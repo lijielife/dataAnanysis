@@ -1,7 +1,7 @@
 <template>
     <system-layout 
         :layout-type="2"
-        system-name="信用卡管家" 
+        system-name="51运营数据" 
         @memuStatusChange="menuStatusChange" 
         :class="{ closed_menu: !isMenuOpen, opened_menu: isMenuOpen, hiden_sub_menu: isHideInlieSubmenu }"
     >

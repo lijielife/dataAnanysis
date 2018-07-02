@@ -43,9 +43,9 @@ import Engine from 'miox-vue2x';
 import store from '../../webstore/index';
 import templateLayout from '../../packages/template-layout';
 import templateMenu from '../../packages/template-menu';
-import templateUserInfo from '../../packages/template-userInfo'
-import templateBreadcrumb from '../../packages/template-breadcrumb'
-import templateTabs from '../../packages/template-tabs'
+import templateUserInfo from '../../packages/template-userInfo';
+import templateBreadcrumb from '../../packages/template-breadcrumb';
+import templateTabs from '../../packages/template-tabs';
 import './index.less';
 
 @Component({

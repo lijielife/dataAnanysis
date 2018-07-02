@@ -8,25 +8,25 @@
 import axios from 'axios';
 import { message } from '@u51/miox-vant';
 
-let base = '';
-if (process.env.NODE_ENV === 'dev') { // 本地调试时使用的后端环境
-    base = 'http://gcp-manager.k8s.dev:8080';
-}
+// let base = '';
+// if (process.env.NODE_ENV === 'dev') { // 本地调试时使用的后端环境
+//     base = 'http://gcp-manager.k8s.dev:8080';
+// }
 
-const path = '/gcp-manager/api/v1';
+// const path = '/gcp-manager/api/v1';
 
 const instance = axios.create({
     withCredentials: true,
 });
-instance.interceptors.request.use((config) => {
-    // 拼装完成url
-    if (process.env.NODE_ENV !== 'dev') { // 使用相对地址
-        config.url = `${path}${config.url}`;
-    } else { // 使用绝对地址
-        config.url = `${base}${path}${config.url}`;
-    }
-    return config;
-});
+// instance.interceptors.request.use((config) => {
+//     // 拼装完成url
+//     if (process.env.NODE_ENV !== 'dev') { // 使用相对地址
+//         config.url = `${path}${config.url}`;
+//     } else { // 使用绝对地址
+//         config.url = `${base}${path}${config.url}`;
+//     }
+//     return config;
+// });
 
 /**
  * @description response返回数据拦截

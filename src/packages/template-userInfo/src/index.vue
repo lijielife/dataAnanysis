@@ -64,11 +64,11 @@ import BaseMixin from './base/index';
         // 下拉框点击事件
         _dropdownClick: (type) => {
             switch (type) {
-            case 'logout': 
+            case 'logout':
                 // 登出
                 const that = this;
                 axios.get('/ssoagentlogin/logoutAndGetLoginUrl')
-                    .then(data => window.location.href = data.message)
+                    .then(data => window.location.href = data.message);
                 break;
             case 'info':
                 alert('用户信息暂未开发，敬请期待～');

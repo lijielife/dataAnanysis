@@ -1,0 +1,105 @@
+@mixin menu-style($rootBg, $subBg, $hoverSubBg, $hoverSubColor) {
+    .system_menu {
+        .ant-menu-root {
+            background: $rootBg;
+        }
+        .ant-menu-inline.ant-menu-sub {
+            background: $subBg;
+        }
+        .ant-menu-submenu-vertical {
+            z-index: 999;
+        }
+        .ant-menu-vertical.ant-menu-sub {
+            background: $hoverSubBg;
+            .ant-menu-item {
+                color: $hoverSubColor;
+            }
+        }
+    }
+}
+.template_layout.hiden_sub_menu {
+    .system_menu>ul>li ul.ant-menu-sub.ant-menu-vertical {
+        display: none;
+    }
+}
+
+.template_layout {
+    height: 100%;
+    .ant-layout {
+        height: 100%;
+        .ant-layout-header {
+            background-color: #fff;
+            box-shadow: 0 1px 1px rgba(0,0,0,.1)
+        }
+        .ant-layout-sider {
+            background: #495060;
+        }
+        .ant-layout-header {
+            i {
+                font-size: 22px;
+                cursor: pointer;
+                transition: color .3s ease-in-out;
+            }
+            i:hover {
+                color: #57a3f3;
+            }
+        }
+        .left_side {
+            color: #fff;
+            background: #495060;
+            height: 64px;
+            line-height: 64px;
+            padding: 0;
+            h1 {
+                min-width: 150px;
+                font-size: 20px;
+                margin: 0 10px;
+                padding-left: 45px;
+                white-space: nowrap;
+            }
+            .company_logo {
+                position: absolute;
+                left: 10px;
+                img {
+                    width: 35px;
+                    margin-top: 15px;
+                }
+            }
+        }
+        .right_side {
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 200px);
+           .ant-layout-header {
+               padding: 0 8px;
+               .anticon {
+                    position: relative;
+                    top: 4px;
+               }
+               .ant-breadcrumb {
+                   display: inline-block;
+                   padding-left: 30px;
+               }
+           }
+        }
+        .left_menu_wrap {
+            @include menu-style(rgb(73, 80, 96), rgb(48, 54, 70), #fff, #000);
+        }
+    }
+
+}
+
+.template_layout.type_two {
+    .ant-layout {
+        .ant-layout-sider {
+            background: #001529;
+        }
+    }
+    .left_side { 
+        background: #002140;
+    }
+    .left_menu_wrap {
+        box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+        @include menu-style(#001529, #000c17, #fff, #000);
+    }
+}

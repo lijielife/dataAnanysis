@@ -1,0 +1,62 @@
+{
+  "name": "fe-template-miox-pc",
+  "version": "1.0.0",
+  "description": "供前端部后台组创建公司后台相关系统使用",
+  "author": "尹博文",
+  "license": "MIT",
+  "service": {
+    "port": 6688,
+    "ip": "0.0.0.0"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=dev node_modules/.bin/webpack-dev-server --config config/webpack.web.dev.config.js --hot --progress",
+    "build": "NODE_ENV=production node_modules/.bin/webpack --config config/webpack.web.pro.config.js -p --progress --hide-modules"
+  },
+  "dependencies": {
+    "@u51/miox-vant": "^1.3.23",
+    "axios": "^0.17.1",
+    "miox": "^5.1.9",
+    "miox-compose": "^5.1.9",
+    "miox-convert": "^5.0.39",
+    "miox-css": "^5.1.9",
+    "miox-router": "^5.1.9",
+    "miox-vue2x": "^5.1.9",
+    "miox-vue2x-classify": "^5.1.9",
+    "miox-vue2x-container": "^5.1.9",
+    "tween.js": "^16.6.0",
+    "vue": "^2.5.3",
+    "vue-template-compiler": "^2.5.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-component": "^0.10.1",
+    "babel-plugin-import": "^1.6.2",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-vue": "^2.1.0",
+    "less-loader": "^4.0.5",
+    "miox-vue2x-webpack-config": "^5.1.9",
+    "postcss-loader": "^2.0.8",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "vue-loader": "^13.5.0",
+    "vue-style-loader": "^3.0.3",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  }
+}

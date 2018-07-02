@@ -1,0 +1,57 @@
+.user-info {
+    .user-info__tool {
+        display: inline-block;
+        float: right;
+        .ant-tooltip-rel {
+            height: 45px;
+            &>i {
+                font-size: 25px;
+            }
+        }
+    }
+  #user-info__area {
+    display: inline-block;
+    float: right;
+    position: relative;
+    .ant-dropdown {
+        ul.ant-menu.ant-menu-root {
+            box-shadow: 0 1px 6px rgba(0,0,0,.2) !important;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .ant-menu-item {
+            width: 140px;
+            padding-left: 30px;
+            background-color: #fff;
+            border-top: 1px solid #e9eaec;
+        }
+        .ant-menu-item:first-child {
+            border-top: none;
+        }
+    }
+  }
+  .user__info {
+    height: 63px;
+    line-height: 63px;
+    padding-right: 15px;
+    .user__item {
+      display: inline-block;
+      height: 46px;
+      line-height: 46px;
+      vertical-align: middle;
+    }
+    .user__avatar {
+      width: 46px;
+      margin-left: 30px;
+      border-radius: 666px;
+    }
+    .user__name {
+      margin-left: 10px;
+      max-width: 96px;
+      font-size: 18px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}

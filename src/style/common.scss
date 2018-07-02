@@ -1,0 +1,70 @@
+.template_layout {
+    .left_menu_wrap {
+        // overflow: visible;
+    }
+    /* 切换时样式变更 */
+    .ant-layout-sider-collapsed {
+        overflow: visible;
+        .system_menu>ul>li.ant-menu-submenu > .ant-menu-submenu-title .anticon,
+        .system_menu>ul>li.ant-menu-item .anticon {
+            margin-right: 0;
+            transform: scale(2);
+            -webkit-transform: scale(2);
+            position: relative;
+            right: 8px;
+        }
+        .system_menu>ul>li.ant-menu-submenu > .ant-menu-submenu-title span span,
+        .system_menu>ul>li.ant-menu-item span {
+            display: none;
+        }
+        .ant-menu-submenu-inline>.ant-menu-submenu-title:after,
+        .ant-menu-submenu-vertical>.ant-menu-submenu-title:after {
+            content: "";
+        }
+        .company_logo~h1 {
+            display: none;
+        }
+        .system_menu>ul>li.ant-menu-submenu .ant-menu-submenu {
+            color: #495060;
+            border-radius: 4px;
+            i {
+                margin-right: 8px;
+                font-size: 12px;
+                transform: scale(1);
+            }
+            .ant-menu-submenu-title:hover {
+                color: #495060;
+                background: rgb(241, 241, 241);
+                border-radius: 4px;
+            }
+            .ant-menu-submenu-title>span>span:hover {
+                color: #000;
+                font-weight: bold;
+            }
+        }
+        .ant-menu-sub {
+            .ant-menu-item {
+                color: #495060;
+            }
+            .ant-menu-item>span:hover {
+                color: #000;
+                font-weight: bold;
+            }
+            .ant-menu-item:hover, .ant-menu-item-selected {
+                background: rgb(241, 241, 241);
+            }
+            .ant-menu-item-selected {
+                border-right: 3px solid rgb(39, 129, 238);
+            }
+            li:first-child {
+                border-radius: 4px 4px 0 0;
+            }
+            li:last-child {
+                border-radius: 0 0 4px 4px;
+            }
+            li:only-child {
+                border-radius: 4px;
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=dev node_modules/.bin/webpack-dev-server --config config/webpack.web.dev.config.js --hot --progress",
-    "build": "NODE_ENV=production node_modules/.bin/webpack --config config/webpack.web.pro.config.js -p --progress --hide-modules"
+    "build": "NODE_ENV=production node_modules/.bin/webpack --config config/webpack.web.pro.config.js -p  --hide-modules"
   },
   "dependencies": {
     "@u51/miox-vant": "^1.3.23",

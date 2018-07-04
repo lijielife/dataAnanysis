@@ -1,24 +1,12 @@
 <template>
-    <nb-breadcrumb style="height: 50px;line-height: 50px;">
-        <nb-breadcrumb-item 
-            name="首页"  
-            style="cursor:pointer"
-            class="view"
-            @click.native="breadClick({name: '首页', type: 'view', uri: '/'})"
-        >
-        </nb-breadcrumb-item>
-        <template v-if="breadPath && breadPath.length">
-            <nb-breadcrumb-item  
-                v-for="item in breadPath" 
-                :key="item.uri" 
-                :name="item.name"
-                @click.native="breadClick(item)" 
-                style="cursor:pointer"
-                :class="{view: item.type === 'view', menu: item.type === 'menu'}"
-            >
-            </nb-breadcrumb-item>
-        </template>
-    </nb-breadcrumb>
+    <div class="header">
+        <nb-tooltip content="bottom 文字提示" placement="bottom">
+            <div class="activity-title">猜世界杯赢百万现金红包</div>
+        </nb-tooltip>
+
+        <nb-tag color="blue">
+            切换活动</nb-tag>
+    </div>
 </template>
 
 <script>
@@ -30,18 +18,14 @@
             'nb-breadcrumb-item': BreadcrumbItem,
         },
         data() {
-            return {
-
-            };
+            return {};
         },
         props: {
             breadPath: { // 面包屑路径数据
                 default: [],
             },
         },
-        computed: {
-    
-        },
+        computed: {},
         methods: {
             breadClick(item) {
                 if (item.type === 'view') {
@@ -51,4 +35,4 @@
         },
     };
 </script>
-<style src="./index.scss" lang="sass" scoped></style>
+<style src="./index.scss" lang="sass" scoped="scoped"></style>

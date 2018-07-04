@@ -7,7 +7,7 @@ const route = new Router();
 route.patch('/', async (ctx) => {
     const inner = await new Promise((resolve) => {
         require.ensure([], (require) => {
-            resolve(require('../webviews/testOne/index.vue'));
+            resolve(require('../webviews/dataPreview/index.vue'));
         });
     });
     await ctx.render(inner.default);

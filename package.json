@@ -5,7 +5,7 @@
   "author": "尹博文",
   "license": "MIT",
   "service": {
-    "port": 6688,
+    "port": 7788,
     "ip": "0.0.0.0"
   },
   "scripts": {
@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@u51/miox-vant": "^1.3.23",
+    "@u51/pg": "^3.4.10",
     "axios": "^0.17.1",
+    "echarts": "^4.1.0",
     "miox": "^5.1.9",
     "miox-compose": "^5.1.9",
     "miox-convert": "^5.0.39",

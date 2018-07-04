@@ -12,10 +12,22 @@
 
 const sideMenuData = [
     {
-        describe: '用户中心',
+        describe: '数据概览',
+        icon: 'area-chart',
+        res_type: 'view',
+        uri: '/user-info1',
+    },
+    {
+        describe: '效益概览',
         icon: 'bank',
         res_type: 'view',
-        uri: '/user-info',
+        uri: '/user-info2',
+    },
+    {
+        describe: '人群分析',
+        icon: 'usergroup-add',
+        res_type: 'view',
+        uri: '/user-info3',
     },
     {
         describe: '首页',

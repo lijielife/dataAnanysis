@@ -1,13 +1,56 @@
 /* eslint-disable import/no-unresolved */
 import vue from 'vue';
-import { Icon, Input, Button, Layout, Breadcrumb, BreadcrumbItem, Grid, Notification,
-    Pagination, Checkbox, Select, Option, Modal, Row, Col, Radio, RadioGroup,
-    CheckboxGroup, Cascader, Message, Tooltip, Tag, Spin, Table, TableColumn, RadioButton,
-    Tabs, TabPane, DatePicker, Flex, Card, Form, FormItem, Contextmenu, Dropdown, DropdownMenu,
-    DropdownItem, DropdownSubmenu, TimePicker, InputNumber, ellipsis, Badge, Menu, icon } from '@u51/miox-vant';
-// import './utils/filter.js'; // 过滤器
+import { PG } from '@u51/pg';
+import {
+    Icon,
+    Input,
+    Button,
+    Layout,
+    Breadcrumb,
+    BreadcrumbItem,
+    Grid,
+    Notification,
+    Pagination,
+    Checkbox,
+    Select,
+    Option,
+    Modal,
+    Row,
+    Col,
+    Radio,
+    RadioGroup,
+    CheckboxGroup,
+    Cascader,
+    Message,
+    Tooltip,
+    Tag,
+    Spin,
+    Table,
+    TableColumn,
+    RadioButton,
+    Tabs,
+    TabPane,
+    DatePicker,
+    Flex,
+    Card,
+    Form,
+    FormItem,
+    Contextmenu,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    DropdownSubmenu,
+    TimePicker,
+    InputNumber,
+    ellipsis,
+    Badge,
+    Menu,
+    icon,
+} from '@u51/miox-vant';
+// import './utils/filter.js';  过滤器
 import axios from './axios';
 
+import { checkEnv, getActivityId } from './utils/helpers.js';
 
 vue.component('nb-icon', Icon);
 vue.component('nb-input', Input);
@@ -66,9 +109,24 @@ vue.prototype.$modal = Modal;
 vue.prototype.$msg = Message;
 vue.prototype.$notify = (msg, type) => {
     type = type || 'success';
-    Notification[type]({
-        message: msg,
-        description: '',
-    });
+    Notification[type]({ message: msg, description: '' });
 };
+const echarts = require('echarts/lib/echarts');
 
+vue.prototype.$echarts = echarts;
+window.echarts = echarts;
+function initial() {
+    checkEnv();
+    getActivityId();
+}
+
+initial();
+
+PG
+    .Log
+    .setMeta({
+        service: 'dataplate_51',
+        sendPolicy: process.env.BUILD_ENV === 'prod'
+            ? 0
+            : 1, // 0:打包发送， 1:实时发送
+    });

@@ -1,57 +1,138 @@
 .user-info {
+   position: absolute;
+   top: 0;
+   right: 0;
     .user-info__tool {
         display: inline-block;
         float: right;
         .ant-tooltip-rel {
             height: 45px;
-            &>i {
+            & > i {
                 font-size: 25px;
             }
         }
     }
-  #user-info__area {
-    display: inline-block;
-    float: right;
-    position: relative;
-    .ant-dropdown {
-        ul.ant-menu.ant-menu-root {
-            box-shadow: 0 1px 6px rgba(0,0,0,.2) !important;
-            border-radius: 4px;
+    .custom-help {
+        margin: 0;
+        padding-left: 20px;
+        padding-right: 20px;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        color: rgb(0, 0, 0);
+        font-size: 18px;
+    }
+    nav ul {
+        list-style: none;
+        text-align: center;
+        display: flex;
+    }
+    nav ul li {
+        display: flex;
+    }
+    nav ul li a {
+        display: block;
+        text-decoration: none;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin: 0 30px;
+        font-size: 14px;
+        color: #888;
+    }
+    nav ul li a,
+    nav ul li a:after,
+    nav ul li a:before {
+        transition: all 0.5s;
+    }
+    nav ul li a:hover {
+        color: #555;
+    }
+
+    /* stroke */
+    nav.stroke ul li a {
+        position: relative;
+    }
+    nav.stroke ul li a:after {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 0;
+        content: '.';
+        color: transparent;
+        background: #aaa;
+        height: 1px;
+    }
+    nav.stroke ul li a:hover:after {
+        width: 100%;
+    }
+
+    nav.fill ul li a {
+        transition: all 2s;
+    }
+
+    nav.fill ul li a:after {
+        text-align: left;
+        content: '.';
+        margin: 0;
+        opacity: 0;
+    }
+    nav.fill ul li a:hover {
+        color: #fff;
+        z-index: 1;
+    }
+    nav.fill ul li a:hover:after {
+        z-index: -10;
+        animation: fill 1s forwards;
+        -webkit-animation: fill 1s forwards;
+        -moz-animation: fill 1s forwards;
+        opacity: 1;
+    }
+
+    #user-info__area {
+        display: inline-block;
+        float: right;
+        position: relative;
+        .ant-dropdown {
+            ul.ant-menu.ant-menu-root {
+                box-shadow: 0 1px 6px rgba(0,0,0,.2) !important;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .ant-menu-item {
+                width: 140px;
+                padding-left: 30px;
+                background-color: #fff;
+                border-top: 1px solid #e9eaec;
+            }
+            .ant-menu-item:first-child {
+                border-top: none;
+            }
+        }
+    }
+    .user__info {
+        height: 63px;
+        line-height: 63px;
+        padding-right: 15px;
+        .user__item {
+            display: inline-block;
+            height: 46px;
+            line-height: 46px;
+            vertical-align: middle;
+        }
+        .user__avatar {
+            width: 46px;
+            margin-left: 30px;
+            border-radius: 666px;
+        }
+        .user__name {
+            margin-left: 10px;
+            max-width: 96px;
+            font-size: 18px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             overflow: hidden;
         }
-        .ant-menu-item {
-            width: 140px;
-            padding-left: 30px;
-            background-color: #fff;
-            border-top: 1px solid #e9eaec;
-        }
-        .ant-menu-item:first-child {
-            border-top: none;
-        }
     }
-  }
-  .user__info {
-    height: 63px;
-    line-height: 63px;
-    padding-right: 15px;
-    .user__item {
-      display: inline-block;
-      height: 46px;
-      line-height: 46px;
-      vertical-align: middle;
-    }
-    .user__avatar {
-      width: 46px;
-      margin-left: 30px;
-      border-radius: 666px;
-    }
-    .user__name {
-      margin-left: 10px;
-      max-width: 96px;
-      font-size: 18px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-  }
 }

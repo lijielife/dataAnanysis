@@ -6,7 +6,7 @@
             <div class="pull-right">
                 
                 <div class="iconBtn">
-                    <nb-icon type="sync"></nb-icon>
+                    <nb-icon type="sync" @click="refresh"></nb-icon>
                 </div>
 
             </div>
@@ -20,13 +20,13 @@
 </template>
 <script>
     import dataAnalysis from '../../packages/template-line-chart/index.vue';
-    import eventHub, {resizeCanvs} from '../../lib/eventhub';
+    import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
 
     require('echarts/lib/chart/line');
 
     export default {
         components: {
-            'data-analysis': dataAnalysis
+            'data-analysis': dataAnalysis,
         },
         data() {
             return {
@@ -45,7 +45,7 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
                         downloadType: 0, // 0表示不下载
 
@@ -64,7 +64,7 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
                         downloadType: 0, // 0表示不下载
 
@@ -84,7 +84,7 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
                         downloadType: 0, // 0表示不下载
                     },
@@ -102,9 +102,9 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
-                        downloadType: 0
+                        downloadType: 0,
                     },
                     join: {
                         name: 'join',
@@ -115,11 +115,11 @@
                         piePath: [
                             {
                                 pieid: 'data-access-chart-behave-2-1',
-                                piePath: `${window.$$commonPath}/api/v1/manager/effect/common/pie?activityId=${window.$$_ActivityId}&itemKey=pv_finishtask&quota=pv_finishtask`
+                                piePath: `${window.$$commonPath}/api/v1/manager/effect/common/pie?activityId=${window.$$_ActivityId}&itemKey=pv_finishtask&quota=pv_finishtask`,
                             }, {
                                 pieid: 'data-access-chart-behave-2-2',
-                                piePath: `${window.$$commonPath}/api/v1/manager/effect/common/pie?activityId=${window.$$_ActivityId}&itemKey=pv_join&quota=pv_join`
-                            }
+                                piePath: `${window.$$commonPath}/api/v1/manager/effect/common/pie?activityId=${window.$$_ActivityId}&itemKey=pv_join&quota=pv_join`,
+                            },
                         ],
                         haspie: false,
                         hastable: true,
@@ -127,9 +127,9 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
-                        downloadType: 0
+                        downloadType: 0,
                     },
                     drawcost: {
                         name: 'drawcost',
@@ -144,9 +144,9 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
-                        downloadType: 0
+                        downloadType: 0,
                     },
                     usecost: {
                         name: 'usecost',
@@ -161,17 +161,17 @@
                         select: {
                             tip: '用户群',
                             defaultSelectLabel: '全部',
-                            defaulSelectKey: '_$$null'
+                            defaulSelectKey: '_$$null',
                         },
-                        downloadType: 0
-                    }
+                        downloadType: 0,
+                    },
                 },
                 otherBaseData: {
                     finishtask: false,
-                    funnel: false
+                    funnel: false,
                 },
                 mianTitleAndId: [],
-                timeranger: []
+                timeranger: [],
             };
         },
         created() {
@@ -197,7 +197,6 @@
                 const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
 
                 this.timeranger = [sevenDaysAgo, now];
-
             },
 
             whichLineChartNeedsShow() {
@@ -207,8 +206,8 @@
                         {
                             // baseURL: window.$$domain,
                             headers: {
-                                Authorization: window.$$Authorization
-                            }
+                                Authorization: window.$$Authorization,
+                            },
                         },
                     )
                     .then((res) => {
@@ -233,7 +232,7 @@
                                     }, delay);
                                 }
                             };
-                        }
+                        };
                         const todosize = () => {
                             for (let i = 0; i < this.mianTitleAndId.length; i++) {
                                 const id = this
@@ -254,8 +253,11 @@
                             hasavfunc();
                         };
                     });
-            }
-        }
+            },
+            refresh() {
+                eventHub.$emit(refresh);
+            },
+        },
     };
 </script>
 <style lang="scss">

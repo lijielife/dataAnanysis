@@ -22,8 +22,8 @@
 <script>
 
     import 'echarts/theme/shine';
-    import eventHub, {resizeCanvs} from '../../lib/eventhub';
-    import {formatDateTime, cloneObj} from '../../utils/helpers';
+    import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
+    import { formatDateTime, cloneObj } from '../../utils/helpers';
 
     require('echarts/lib/component/tooltip');
     require('echarts/lib/component/toolbox');
@@ -39,10 +39,10 @@
                     this.rangeDate[1] = nowTime;
                     this.rangeDate[0] = this.rangeDate[1] - (7 * 24 * 60 * 60 * 1000);
                 }
-            }
+            },
         },
         props: [
-            'timeranger', 'mianTitleAndId'
+            'timeranger', 'mianTitleAndId',
         ],
         data() {
             return {
@@ -61,15 +61,15 @@
                 groupIds: [
                     {
                         key: this.mianTitleAndId.select.defaulSelectKey,
-                        value: this.mianTitleAndId.select.defaultSelectLabel
-                    }
+                        value: this.mianTitleAndId.select.defaultSelectLabel,
+                    },
                 ],
                 hint: '',
                 content: '',
                 fuzzQuery: '',
                 select: this.mianTitleAndId.select.defaulSelectKey,
                 downUrl: '',
-                subQuota: {}
+                subQuota: {},
             };
         },
 
@@ -89,6 +89,9 @@
                         .myChart
                         .resize();
                 }
+            });
+            eventHub.$on(refresh, () => {
+                this.toshow();
             });
         },
 
@@ -165,8 +168,8 @@
                 const respdata = await axios.get(baseURL, {
                     // baseURL: window.$$domain,
                     headers: {
-                        Authorization: window.$$Authorization
-                    }
+                        Authorization: window.$$Authorization,
+                    },
                 });
 
                 // 如果正确返回
@@ -230,13 +233,13 @@
 
                     for (const name in selected) {
                         if (selected.hasOwnProperty(name)) {
-                            legend.push({name});
+                            legend.push({ name });
                         }
                     }
 
                     this
                         .myChart
-                        .dispatchAction({type: action, batch: legend});
+                        .dispatchAction({ type: action, batch: legend });
                 };
 
                 const savePreSelected = (selected) => {
@@ -369,7 +372,7 @@
                         const temp = {
                             name: v.value,
                             icon: 'rect',
-                            key: v.key
+                            key: v.key,
                         };
                         this
                             .legendKey
@@ -408,7 +411,7 @@
                         const len = subQuota[key].length;
                         const subitemkeys = subQuota[key];
                         this.formatSubDatas[key] = {
-                            hasSubQuota: true
+                            hasSubQuota: true,
                         };
                         for (let i = 0; i < len; i++) {
                             this.formatSubDatas[key][subitemkeys[i]] = 0;
@@ -456,7 +459,7 @@
                 // 默认用'_$$null'表示 ‘全部’
                 this
                     .groupIds
-                    .push({key: defaulSelectKey, value: defaultSelectLabel});
+                    .push({ key: defaulSelectKey, value: defaultSelectLabel });
                 if (Array.isArray(groups)) {
                     groups.forEach((v) => {
                         this
@@ -488,7 +491,7 @@
                         for (let vv = 0; vv < data.length; vv++) {
                             const item = {
                                 value: 0,
-                                other: {}
+                                other: {},
                             };
                             item.value = data[vv].value / 100;
 
@@ -505,7 +508,7 @@
                             name: this
                                 .legendVal[i]
                                 .name,
-                            data: newData
+                            data: newData,
                         };
 
                         this
@@ -523,7 +526,7 @@
                             name: this
                                 .legendVal[j]
                                 .name,
-                            data: predata
+                            data: predata,
                         };
 
                         this
@@ -566,32 +569,32 @@
                             return str;
                         },
                         axisPointer: {
-                            type: 'none'
+                            type: 'none',
                         },
 
-                        borderColor: "rgb(51, 152, 219)",
+                        borderColor: 'rgb(51, 152, 219)',
                         borderWidth: 1,
-                        backgroundColor: "rgba(255,255,255,0.7)",
+                        backgroundColor: 'rgba(255,255,255,0.7)',
                         textStyle: {
                             color: '#666',
                             fontFamily: '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',
-                            fontSize: '12px/18px'
+                            fontSize: '12px/18px',
                         },
-                        extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
+                        extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
                     },
                     legend: {
                         data: legendVal,
                         show: true,
                         bottom: 0,
                         orient: 'horizontal',
-                        type: 'scroll'
+                        type: 'scroll',
                     },
                     grid: {
                         top: '6%',
                         left: '1%',
                         right: '2%',
                         bottom: '12%',
-                        containLabel: true
+                        containLabel: true,
                     },
 
                     xAxis: {
@@ -600,32 +603,32 @@
                         data: xAxis,
                         axisLabel: {
                             textStyle: {
-                                color: '#8492A6'
-                            }
+                                color: '#8492A6',
+                            },
                         },
                         offset: 4,
-                        boundaryGap: ['20%', '20%']
+                        boundaryGap: ['20%', '20%'],
                     },
                     yAxis: {
                         axisLabel: {
                             textStyle: {
-                                color: '#8492A6'
-                            }
+                                color: '#8492A6',
+                            },
                         },
                         type: 'value',
                         axisLine: {
-                            show: false
+                            show: false,
                         },
                         axisTick: {
-                            show: false
+                            show: false,
                         },
                         splitLine: {
                             lineStyle: {
-                                type: 'dotted'
-                            }
-                        }
+                                type: 'dotted',
+                            },
+                        },
                     },
-                    series
+                    series,
                 };
 
                 return this.bastoptions;
@@ -639,7 +642,6 @@
             },
 
             draw(tempdata) {
-
                 this
                     .myChart
                     .setOption(tempdata, true);
@@ -750,7 +752,7 @@
                                     yvalue: keyitem[groupid][0].yvalue * 100,
                                     itemKey: keyitem[groupid][0].itemKey,
                                     groupId: keyitem[groupid][0].groupId,
-                                    subItem: keyitem[groupid][0].subItem
+                                    subItem: keyitem[groupid][0].subItem,
                                 };
 
                                 if (this.subQuota[itemKey] && this.subQuota[itemKey].length) {
@@ -791,8 +793,8 @@
                                         itemKey: key,
                                         xvalue: xAxis[0],
                                         yvalue: 0,
-                                        subItem: undefined
-                                    },);
+                                        subItem: undefined,
+                                    });
                             }
                         }
                     }
@@ -881,7 +883,7 @@
                             .key;
                         let total = 0;
                         const obj = {
-                            value: 0
+                            value: 0,
                         };
 
                         if (num > 1) {
@@ -932,7 +934,7 @@
                         const keyitem = this.unityformatDatas[key];
                         let total = 0;
                         const obj = {
-                            value: 0
+                            value: 0,
                         };
                         const other = {};
                         let needtotalother = false;
@@ -975,8 +977,8 @@
                             .push(obj);
                     }
                 }
-            }
-        }
+            },
+        },
     };
 </script>
 <style>
@@ -988,7 +990,6 @@
         padding: 14px 20px;
         width: 46%;
         float: left;
-        margin-right: 20px;
         margin-left: 20px;
         margin-bottom: 20px;
     }

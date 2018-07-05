@@ -1,15 +1,23 @@
 <template>
     <section class="data-container">
         <div class="dashboard-toolbar">
-            <span contenteditable="false" class="dashboard-name" data-originname="运营数据概览">运营数据概览</span>
-
+            <div class="pull-left">
+                <nb-datepicker
+                    v-model="timeranger"
+                    range="range"
+                    size="large"
+                    clearable="clearable"></nb-datepicker>
+                       <div class="iconBtn">
+                    <nb-icon type="sync" @click="refresh"></nb-icon>
+                </div>
+            </div>
+            <!-- <span contenteditable="false" class="dashboard-name" data-originname="运营数据概览">运营数据概览</span>
             <div class="pull-right">
-                
                 <div class="iconBtn">
                     <nb-icon type="sync" @click="refresh"></nb-icon>
                 </div>
+            </div> -->
 
-            </div>
         </div>
         <data-analysis
             :mianTitleAndId="v"
@@ -19,7 +27,9 @@
     </section>
 </template>
 <script>
+
     import dataAnalysis from '../../packages/template-line-chart/index.vue';
+
     import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
 
     require('echarts/lib/chart/line');
@@ -270,21 +280,33 @@
             padding: 20px 23px 10px;
             box-sizing: border-box;
             overflow: hidden;
-            .pull-right {
-                float: right!important;
-                padding-right: 20px;
-                .iconBtn {
+            text-align: center;
+            font-size: 20px;
+            // .pull-right {
+            //     float: right!important;
+            //     padding-right: 20px;
+            //     display: flex;
+            //     min-width: 300px;
+            //     justify-content: space-around;
+              
+            // }
+            .pull-left {
+                float: left!important;
+                display: flex;
+                margin-top: -3px;
+                  .iconBtn {
                     cursor: pointer;
                     border: 1px solid #E9F0F7;
                     box-shadow: none;
                     background: #fff;
                     color: #99A9BF;
                     outline: 0;
-                    height: 36px;
-                    line-height: 36px;
+                    height: 32px;
+                    line-height: 32px;
                     text-align: center;
-                    min-width: 40px;
+                    min-width: 38px;
                     font-size: 14px;
+                    margin-left: 20px;
                 }
                 .iconBtn:hover {
                     color: #559FF0;

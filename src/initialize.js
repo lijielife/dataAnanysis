@@ -86,7 +86,7 @@ vue.component('nb-radio-button', RadioButton);
 vue.component('nb-tabs', Tabs);
 vue.component('nb-card', Card);
 vue.component('nb-tab-pane', TabPane);
-vue.component('nb-datePicker', DatePicker);
+vue.component('nb-datepicker', DatePicker);
 vue.component('Flex', Flex);
 vue.component('icon', icon);
 vue.component('Contextmenu', Contextmenu);

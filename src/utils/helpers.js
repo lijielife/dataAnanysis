@@ -98,7 +98,7 @@ export function getActivityId(activityId) {
 * @desc: 查询环境
 */
 export function checkEnv() {
-    if (typeof PG.QS.env !== 'undefined') {
+    if (location.origin !== 'http://opsplate.u51-inc.com') {
         window.$$Authorization = 'service 123';
     } else {
         window.$$Authorization = 'service 2d42dfcba08934aa819eea25e500ac3d';

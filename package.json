@@ -13,7 +13,7 @@
     "build": "NODE_ENV=production node_modules/.bin/webpack --config config/webpack.web.pro.config.js -p  --hide-modules"
   },
   "dependencies": {
-    "@u51/miox-vant": "^1.3.23",
+    "@u51/miox-vant": "^1.3.22",
     "@u51/pg": "^3.4.10",
     "axios": "^0.17.1",
     "echarts": "^4.1.0",

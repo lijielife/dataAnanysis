@@ -1,5 +1,6 @@
 const webpackConfig = require('miox-vue2x-webpack-config');
 const alias = require('./alias');
+const webpack = require('webpack');
 
 module.exports = webpackConfig(config => {
     config.set({

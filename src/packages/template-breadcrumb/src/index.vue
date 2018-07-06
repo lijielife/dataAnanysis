@@ -22,7 +22,8 @@
             title="切换活动"
             :confirm-loading="loading4showChangeActivityModel"
             modal-style="top:10px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div
+                style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
                 <nb-input placeholder="输入活动名称" size="large">
                     <nb-icon type="search" slot="prefix"></nb-icon>
                 </nb-input>
@@ -34,28 +35,27 @@
             <nb-table
                 :data="asyncTable"
                 border="border"
-                :scroll="{ y: 300,x:484 }"
+                :scroll="{ y: 300 }"
                 :columns="columns"
                 show-scrollbar="show-scrollbar"></nb-table>
-                <div slot="footer">
-
-                </div>
+            <div slot="footer"></div>
 
         </nb-modal>
     </div>
 </template>
 
 <script>
-    import { Breadcrumb, BreadcrumbItem } from '@u51/miox-vant';
-    import { formatDateTime } from '../../../utils/helpers';
+    import {Breadcrumb, BreadcrumbItem} from '@u51/miox-vant';
+    import {formatDateTime} from '../../../utils/helpers';
 
     export default {
         components: {
             'nb-breadcrumb': Breadcrumb,
-            'nb-breadcrumb-item': BreadcrumbItem,
+            'nb-breadcrumb-item': BreadcrumbItem
         },
         data() {
-            return { headerDatas: {},
+            return {
+                headerDatas: {},
                 content: '',
                 showChangeActivityModel: false,
                 loading4showChangeActivityModel: false,
@@ -64,39 +64,35 @@
                     {
                         label: '活动ID',
                         prop: 'id',
-                        width: 40,
-                    },
-                    {
+                        width: 40
+                    }, {
                         label: '活动名称',
                         prop: 'name',
-                        width: 40,
-                    },
-                    {
+                        width: 40
+                    }, {
                         label: '活动时间',
                         prop: 'time',
-                        width: 40,
-                    },
-                    {
+                        width: 40
+                    }, {
                         label: '创建人',
                         prop: 'owner',
-                        width: 100,
-                    },
-                ] };
+                        width: 100
+                    }
+                ]
+            };
         },
 
         props: {
             breadPath: { // 面包屑路径数据
-                default: [],
-            },
+                default: []
+            }
         },
         created() {
             this.initial();
         },
         computed: {},
         methods: {
-            toserch() {
-
-            },
+            toserch() {},
             open4showChangeActivityModel() {
                 this.showChangeActivityModel = true;
             },
@@ -116,8 +112,8 @@
                     .get(headInfoURL, {
                         // baseURL: window.$$domain,
                         headers: {
-                            Authorization: window.$$Authorization,
-                        },
+                            Authorization: window.$$Authorization
+                        }
                     })
                     .then((resp) => {
                         if (resp.code === 0) {
@@ -131,8 +127,8 @@
                 if (item.type === 'view') {
                     this.$push(item.uri);
                 }
-            },
-        },
+            }
+        }
     };
 </script>
 <style src="./index.scss" lang="sass" scoped="scoped"></style>

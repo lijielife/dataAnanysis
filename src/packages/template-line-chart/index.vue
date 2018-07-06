@@ -2,10 +2,22 @@
     <section class="data-preview">
         <div class="widget-topbar" style="cursor: auto;">
             <div class="widget-title">
-                <div class="title">
+                <div class="title" style="border-bottom:1px solid black;">
                     <a>{{mianTitleAndId.title}}</a>
                 </div>
-                <div class="range">2018-06-25<span>~</span>2018-07-01 | 上周</div>
+                <div class="overview">
+                    <div>
+                            24207
+                    </div>
+                     <div>
+                        <p>昨日总量:22222 |</p>
+                         <p>昨日总量:22222 |</p>
+                    </div>
+                     <div>
+                         <p>昨日总量:22222</p>
+                         <p>昨日总量:22222</p>
+                    </div>
+                </div>
             </div>
             <div class="pull-right widget-setting">
                 <div class="customer-menu"></div>
@@ -71,6 +83,7 @@
                 select: this.mianTitleAndId.select.defaulSelectKey,
                 downUrl: '',
                 subQuota: {},
+                overview: {},
             };
         },
 
@@ -105,6 +118,20 @@
          */
 
         methods: {
+            getOverview() {
+                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
+                axios.get(baseURL, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                }).then((res) => {
+                    if (res.code === 0) {
+                        this.overview = res.data;
+                    }
+                });
+            },
+
             async toshow() {
                 this.hasshow = 1;
                 await this.getDateStream(this.rangeDate); // 先把数据拿到
@@ -138,6 +165,7 @@
             },
 
             async getDateStream(startAndend) {
+                this.getOverview();
                 const id = this.mianTitleAndId.MountedId;
 
                 if (!this.myChart) {
@@ -1006,5 +1034,8 @@
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
         border-bottom: 5px solid #3398DB;
+    }
+    .overview{
+        display: flex;
     }
 </style>

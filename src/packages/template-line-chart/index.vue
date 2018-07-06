@@ -39,6 +39,7 @@
                     this.rangeDate[1] = nowTime;
                     this.rangeDate[0] = this.rangeDate[1] - (7 * 24 * 60 * 60 * 1000);
                 }
+                this.toshow();
             },
         },
         props: [
@@ -599,7 +600,6 @@
 
                     xAxis: {
                         type: 'category',
-                        boundaryGap: false,
                         data: xAxis,
                         axisLabel: {
                             textStyle: {

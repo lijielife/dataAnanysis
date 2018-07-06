@@ -134,3 +134,24 @@ export function cloneObj(obj) {
     }
     return newobj;
 }
+
+
+export function debounce(...args) {
+    const context = this;
+    const fn = args[0];
+    const delay = args[1];
+    let timer = null;
+
+    return function later() {
+        if (timer) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                fn.apply(context, args);
+            }, delay);
+        } else {
+            timer = setTimeout(() => {
+                fn.apply(context, args);
+            }, delay);
+        }
+    };
+}

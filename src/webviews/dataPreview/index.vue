@@ -7,34 +7,35 @@
                     range="range"
                     size="large"
                     clearable="clearable"></nb-datepicker>
-                       <div class="iconBtn">
-                    <nb-icon type="sync" @click="refresh"></nb-icon>
-                </div>
-            </div>
-            <!-- <span contenteditable="false" class="dashboard-name" data-originname="运营数据概览">运营数据概览</span>
-            <div class="pull-right">
                 <div class="iconBtn">
                     <nb-icon type="sync" @click="refresh"></nb-icon>
                 </div>
-            </div> -->
-
+            </div>
+            <!-- <span contenteditable="false" class="dashboard-name"
+            data-originname="运营数据概览">运营数据概览</span> <div class="pull-right"> <div
+            class="iconBtn"> <nb-icon type="sync" @click="refresh"></nb-icon> </div> </div>
+            -->
         </div>
         <data-analysis
             :mianTitleAndId="v"
             v-for=" (v,k) in mianTitleAndId"
             :key="k"
             :timeranger="timeranger"></data-analysis>
+
+    
     </section>
 </template>
 <script>
 
     import dataAnalysis from '../../packages/template-line-chart/index.vue';
 
-    import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
+    import eventHub, { resizeCanvs, refresh, stretchLayout } from '../../lib/eventhub';
+    import { debounce } from '../../utils/helpers';
 
     require('echarts/lib/chart/line');
 
     export default {
+
         components: {
             'data-analysis': dataAnalysis,
         },
@@ -185,6 +186,9 @@
             };
         },
         created() {
+            eventHub.$on(stretchLayout, () => {
+                this.todosize();
+            });
             this.whichLineChartNeedsShow();
         },
 
@@ -223,49 +227,39 @@
                     .then((res) => {
                         this.filter(res.data);
                         this.createDefaultRrangeOfTime();
-                        const container = document.getElementsByClassName('page-container')[0];
-                        const debounce = (...args) => {
-                            const context = this;
-                            const fn = args[0];
-                            const delay = args[1];
-                            let timer = null;
-
-                            return function later() {
-                                if (timer) {
-                                    clearTimeout(timer);
-                                    timer = setTimeout(() => {
-                                        fn.apply(context, args);
-                                    }, delay);
-                                } else {
-                                    timer = setTimeout(() => {
-                                        fn.apply(context, args);
-                                    }, delay);
-                                }
-                            };
-                        };
-                        const todosize = () => {
-                            for (let i = 0; i < this.mianTitleAndId.length; i++) {
-                                const id = this
-                                    .mianTitleAndId[i]
-                                    .MountedId;
-                                const mychartContainer = document.getElementById(id);
-                                const currentw = window
-                                    .getComputedStyle(container)
-                                    .width;
-                                const wannerw = +currentw.slice(0, currentw.length - 2) * 0.40;
-                                mychartContainer.style.width = `${wannerw}px`;
-                                eventHub.$emit('resizeCanvs');
-                            }
-                        };
-                        const hasavfunc = debounce(todosize, 60);
-
+                        this.hasavfunc = debounce(this.todosize, 60);
                         window.onresize = () => {
-                            hasavfunc();
+                            this.hasavfunc();
                         };
                     });
             },
             refresh() {
                 eventHub.$emit(refresh);
+            },
+            rehasavfunc() {
+                if (this.hasavfunc) {
+                    this.hasavfunc();
+                } else {
+                    this.hasavfunc = debounce(this.todosize, 60);
+                    this.hasavfunc();
+                }
+            },
+            todosize() {
+                if (!this.container) {
+                    this.container = document.getElementsByClassName('page-container')[0];
+                }
+                for (let i = 0; i < this.mianTitleAndId.length; i++) {
+                    const id = this
+                        .mianTitleAndId[i]
+                        .MountedId;
+                    const mychartContainer = document.getElementById(id);
+                    const currentw = window
+                        .getComputedStyle(this.container)
+                        .width;
+                    const wannerw = +currentw.slice(0, currentw.length - 2) * 0.40;
+                    mychartContainer.style.width = `${wannerw}px`;
+                    eventHub.$emit(resizeCanvs);
+                }
             },
         },
     };
@@ -288,13 +282,13 @@
             //     display: flex;
             //     min-width: 300px;
             //     justify-content: space-around;
-              
+
             // }
             .pull-left {
                 float: left!important;
                 display: flex;
                 margin-top: -3px;
-                  .iconBtn {
+                .iconBtn {
                     cursor: pointer;
                     border: 1px solid #E9F0F7;
                     box-shadow: none;

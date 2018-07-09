@@ -5,18 +5,39 @@
                 <div class="title" style="border-bottom:1px solid black;">
                     <a>{{mianTitleAndId.title}}</a>
                 </div>
-                <div class="overview">
-                    <div>
-                            24207
+                <div class="overview" v-if="overview">
+                    <div class="section1">
+                        <div class="today">
+                            {{ overview.today.value}}
+                            <span class="unit">{{ overview.unit.value }}</span>
+                        </div>
+                        <div class="compYesterday">
+                            <p>{{overview.compYesterday.desc}}
+                                <span :class="[overview.compRise.value ? 'up' :'down' ]">
+                                    {{ overview.compYesterday.value}}
+                                </span>
+
+                            </p>
+                        </div>
                     </div>
-                     <div>
-                        <p>昨日总量:22222 |</p>
-                         <p>昨日总量:22222 |</p>
+                    <div class="section2">
+                        <div class="descl">
+                            <p>
+                                <span>{{overview.yesterday.desc}}:</span>{{ overview.yesterday.value}}</p>
+
+                        </div>
+                        <div class="descr">
+                            <p>
+                                <span>{{overview.yesterdayNow.desc}}:</span>
+                                {{ overview.yesterdayNow.value}}</p>
+                            <p>
+                                <span>{{overview.total.desc}}:</span>
+                                {{ overview.total.value}}
+                            </p>
+                        </div>
+
                     </div>
-                     <div>
-                         <p>昨日总量:22222</p>
-                         <p>昨日总量:22222</p>
-                    </div>
+
                 </div>
             </div>
             <div class="pull-right widget-setting">
@@ -34,8 +55,8 @@
 <script>
 
     import 'echarts/theme/shine';
-    import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
-    import { formatDateTime, cloneObj } from '../../utils/helpers';
+    import eventHub, {resizeCanvs, refresh} from '../../lib/eventhub';
+    import {formatDateTime, cloneObj} from '../../utils/helpers';
 
     require('echarts/lib/component/tooltip');
     require('echarts/lib/component/toolbox');
@@ -52,10 +73,10 @@
                     this.rangeDate[0] = this.rangeDate[1] - (7 * 24 * 60 * 60 * 1000);
                 }
                 this.toshow();
-            },
+            }
         },
         props: [
-            'timeranger', 'mianTitleAndId',
+            'timeranger', 'mianTitleAndId'
         ],
         data() {
             return {
@@ -74,8 +95,8 @@
                 groupIds: [
                     {
                         key: this.mianTitleAndId.select.defaulSelectKey,
-                        value: this.mianTitleAndId.select.defaultSelectLabel,
-                    },
+                        value: this.mianTitleAndId.select.defaultSelectLabel
+                    }
                 ],
                 hint: '',
                 content: '',
@@ -83,7 +104,7 @@
                 select: this.mianTitleAndId.select.defaulSelectKey,
                 downUrl: '',
                 subQuota: {},
-                overview: {},
+                overview: false
             };
         },
 
@@ -118,18 +139,23 @@
          */
 
         methods: {
+            toeval(val) {
+                return eval(val);
+            },
             getOverview() {
                 const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
-                axios.get(baseURL, {
-                    // baseURL: window.$$domain,
-                    headers: {
-                        Authorization: window.$$Authorization,
-                    },
-                }).then((res) => {
-                    if (res.code === 0) {
-                        this.overview = res.data;
-                    }
-                });
+                axios
+                    .get(baseURL, {
+                        // baseURL: window.$$domain,
+                        headers: {
+                            Authorization: window.$$Authorization
+                        }
+                    })
+                    .then((res) => {
+                        if (res.code === 0) {
+                            this.overview = res.data.indicators;
+                        }
+                    });
             },
 
             async toshow() {
@@ -197,8 +223,8 @@
                 const respdata = await axios.get(baseURL, {
                     // baseURL: window.$$domain,
                     headers: {
-                        Authorization: window.$$Authorization,
-                    },
+                        Authorization: window.$$Authorization
+                    }
                 });
 
                 // 如果正确返回
@@ -262,13 +288,13 @@
 
                     for (const name in selected) {
                         if (selected.hasOwnProperty(name)) {
-                            legend.push({ name });
+                            legend.push({name});
                         }
                     }
 
                     this
                         .myChart
-                        .dispatchAction({ type: action, batch: legend });
+                        .dispatchAction({type: action, batch: legend});
                 };
 
                 const savePreSelected = (selected) => {
@@ -401,7 +427,7 @@
                         const temp = {
                             name: v.value,
                             icon: 'rect',
-                            key: v.key,
+                            key: v.key
                         };
                         this
                             .legendKey
@@ -440,7 +466,7 @@
                         const len = subQuota[key].length;
                         const subitemkeys = subQuota[key];
                         this.formatSubDatas[key] = {
-                            hasSubQuota: true,
+                            hasSubQuota: true
                         };
                         for (let i = 0; i < len; i++) {
                             this.formatSubDatas[key][subitemkeys[i]] = 0;
@@ -488,7 +514,7 @@
                 // 默认用'_$$null'表示 ‘全部’
                 this
                     .groupIds
-                    .push({ key: defaulSelectKey, value: defaultSelectLabel });
+                    .push({key: defaulSelectKey, value: defaultSelectLabel});
                 if (Array.isArray(groups)) {
                     groups.forEach((v) => {
                         this
@@ -520,7 +546,7 @@
                         for (let vv = 0; vv < data.length; vv++) {
                             const item = {
                                 value: 0,
-                                other: {},
+                                other: {}
                             };
                             item.value = data[vv].value / 100;
 
@@ -537,7 +563,7 @@
                             name: this
                                 .legendVal[i]
                                 .name,
-                            data: newData,
+                            data: newData
                         };
 
                         this
@@ -555,7 +581,7 @@
                             name: this
                                 .legendVal[j]
                                 .name,
-                            data: predata,
+                            data: predata
                         };
 
                         this
@@ -598,7 +624,7 @@
                             return str;
                         },
                         axisPointer: {
-                            type: 'none',
+                            type: 'none'
                         },
 
                         borderColor: 'rgb(51, 152, 219)',
@@ -607,23 +633,23 @@
                         textStyle: {
                             color: '#666',
                             fontFamily: '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',
-                            fontSize: '12px/18px',
+                            fontSize: '12px/18px'
                         },
-                        extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+                        extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
                     },
                     legend: {
                         data: legendVal,
                         show: true,
                         bottom: 0,
                         orient: 'horizontal',
-                        type: 'scroll',
+                        type: 'scroll'
                     },
                     grid: {
                         top: '6%',
                         left: '1%',
                         right: '2%',
                         bottom: '12%',
-                        containLabel: true,
+                        containLabel: true
                     },
 
                     xAxis: {
@@ -631,32 +657,32 @@
                         data: xAxis,
                         axisLabel: {
                             textStyle: {
-                                color: '#8492A6',
-                            },
+                                color: '#8492A6'
+                            }
                         },
                         offset: 4,
-                        boundaryGap: ['20%', '20%'],
+                        boundaryGap: ['20%', '20%']
                     },
                     yAxis: {
                         axisLabel: {
                             textStyle: {
-                                color: '#8492A6',
-                            },
+                                color: '#8492A6'
+                            }
                         },
                         type: 'value',
                         axisLine: {
-                            show: false,
+                            show: false
                         },
                         axisTick: {
-                            show: false,
+                            show: false
                         },
                         splitLine: {
                             lineStyle: {
-                                type: 'dotted',
-                            },
-                        },
+                                type: 'dotted'
+                            }
+                        }
                     },
-                    series,
+                    series
                 };
 
                 return this.bastoptions;
@@ -780,7 +806,7 @@
                                     yvalue: keyitem[groupid][0].yvalue * 100,
                                     itemKey: keyitem[groupid][0].itemKey,
                                     groupId: keyitem[groupid][0].groupId,
-                                    subItem: keyitem[groupid][0].subItem,
+                                    subItem: keyitem[groupid][0].subItem
                                 };
 
                                 if (this.subQuota[itemKey] && this.subQuota[itemKey].length) {
@@ -816,13 +842,9 @@
                             } else {
                                 this
                                     .suppleformatDatas[key][groupid]
-                                    .push({
-                                        groupId: groupid,
-                                        itemKey: key,
-                                        xvalue: xAxis[0],
-                                        yvalue: 0,
-                                        subItem: undefined,
-                                    });
+                                    .push(
+                                        {groupId: groupid, itemKey: key, xvalue: xAxis[0], yvalue: 0, subItem: undefined}
+                                    );
                             }
                         }
                     }
@@ -911,7 +933,7 @@
                             .key;
                         let total = 0;
                         const obj = {
-                            value: 0,
+                            value: 0
                         };
 
                         if (num > 1) {
@@ -962,7 +984,7 @@
                         const keyitem = this.unityformatDatas[key];
                         let total = 0;
                         const obj = {
-                            value: 0,
+                            value: 0
                         };
                         const other = {};
                         let needtotalother = false;
@@ -1005,11 +1027,11 @@
                             .push(obj);
                     }
                 }
-            },
-        },
+            }
+        }
     };
 </script>
-<style>
+<style lang="scss">
     .data-preview {
         background: #FFF;
         box-shadow: 0 2px 11px 0 rgba(190,202,218,.17);
@@ -1035,7 +1057,104 @@
         border-right: 5px solid transparent;
         border-bottom: 5px solid #3398DB;
     }
-    .overview{
+    .overview {
         display: flex;
+        padding: 4px;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Roboto','Helvetica Neue',Helvetica,Arial,sans-serif;
+        .section1 {
+            display: flex;
+            align-content: center;
+            flex-direction: column;
+            justify-content: center;
+            .today {
+                text-align: left;
+                font-size: 40px;
+                font-weight: 600;
+                height: 30px;
+                line-height: 30px;
+                font-family: 'Tangerine', serif;
+                display: flex;
+                align-items: center;
+                margin-right: 20px;
+                color: #475669;
+                padding: 0;
+                margin: 0;
+                position: relative;
+                .unit {
+                    font-size: 12px;
+                    vertical-align: bottom;
+                    position: absolute;
+                    bottom: -6px;
+                    left: 20px;
+                }
+            }
+            .compYesterday {
+                font-size: 12px;
+                position: relative;
+                .up {
+                    color: #2DCA93;
+                    position: relative;
+                    padding-left: 10px;
+                    &::before {
+                        position: absolute;
+                        content: "";
+                        width: 0;
+                        height: 0;
+                        border-top: 4px solid transparent;
+                        border-right: 4px solid transparent;
+                        border-bottom: 8px solid #2DCA93;
+                        border-left: 4px solid transparent;
+                        left: -2px;
+                    }
+
+                }
+                .down {
+                    color: #FC6772;
+                    position: absolute;
+                    top: -4px;
+                    left: -7px;
+                    &::before {
+                        position: absolute;
+                        content: "";
+                        width: 0;
+                        height: 0;
+                        border-top: 8px solid #FC6772;
+                        border-right: 4px solid transparent;
+                        border-bottom: 4px solid transparent;
+                        border-left: 4px solid transparent;
+                        left: -2px;
+                    }
+                }
+            }
+        }
+        .section2 {
+            display: flex;
+            flex-direction: row;
+            height: 40px;
+            padding: 2px;
+            box-sizing: border-box;
+            .descl,
+            .descr {
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                padding-right: 4px;
+                p {
+                    span {
+                        min-width: 66px;
+                        clear: left;
+                        float: left;
+                        text-align: right;
+                        padding-right: 2px;
+                    }
+                }
+            }
+            .descl {
+                border-right: 1px solid #8492A6;
+            }
+
+        }
     }
 </style>

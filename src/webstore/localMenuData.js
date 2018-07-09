@@ -15,13 +15,13 @@ const sideMenuData = [
         describe: '数据概览',
         icon: 'area-chart',
         res_type: 'view',
-        uri: '/user-info1',
+        uri: '/data-overview',
     },
     {
         describe: '效益概览',
         icon: 'bank',
         res_type: 'view',
-        uri: '/user-info2',
+        uri: '/benefit-analysis',
     },
     {
         describe: '人群分析',

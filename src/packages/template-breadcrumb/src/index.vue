@@ -8,7 +8,6 @@
                 <p>
                     活动时间:&nbsp;{{ toformatDateTime(headerDatas.startTime) }}~{{ toformatDateTime(headerDatas.endTime) }}
                 </p>
-
             </template>
         </nb-tooltip>
 
@@ -18,13 +17,16 @@
             @click.native="open4showChangeActivityModel">
             切换活动</nb-tag>
         <nb-modal
+            @cancel="closeModal"
             :visible="showChangeActivityModel"
             title="切换活动"
+            style="cursor:pointer"
+            :modalWidth="modalWidth"
             :confirm-loading="loading4showChangeActivityModel"
             modal-style="top:10px;">
             <div
                 style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-                <nb-input placeholder="输入活动名称" size="large">
+                <nb-input placeholder="输入活动名称" size="large" v-model="name">
                     <nb-icon type="search" slot="prefix"></nb-icon>
                 </nb-input>
                 <nb-button
@@ -33,19 +35,20 @@
                     type="primary">搜索</nb-button>
             </div>
             <nb-table
+                @click.native="select2go($event)"
                 :data="asyncTable"
                 border="border"
                 :scroll="{ y: 300 }"
                 :columns="columns"
                 show-scrollbar="show-scrollbar"></nb-table>
             <div slot="footer"></div>
-
         </nb-modal>
     </div>
 </template>
 
 <script>
-    import {Breadcrumb, BreadcrumbItem} from '@u51/miox-vant';
+    import {Breadcrumb, BreadcrumbItem, modal} from '@u51/miox-vant';
+
     import {formatDateTime} from '../../../utils/helpers';
 
     export default {
@@ -60,25 +63,9 @@
                 showChangeActivityModel: false,
                 loading4showChangeActivityModel: false,
                 asyncTable: [],
-                columns: [
-                    {
-                        label: '活动ID',
-                        prop: 'id',
-                        width: 40
-                    }, {
-                        label: '活动名称',
-                        prop: 'name',
-                        width: 40
-                    }, {
-                        label: '活动时间',
-                        prop: 'time',
-                        width: 40
-                    }, {
-                        label: '创建人',
-                        prop: 'owner',
-                        width: 100
-                    }
-                ]
+                name: '',
+                columns: [],
+                modalWidth: 780
             };
         },
 
@@ -90,9 +77,62 @@
         created() {
             this.initial();
         },
+
         computed: {},
         methods: {
-            toserch() {},
+            closeModal() {
+                this.showChangeActivityModel = false;
+            },
+            select2go(e) {
+                if (e.target.tagName === 'TD') {
+                    const activityId = e
+                        .target
+                        .parentNode
+                        .getElementsByTagName('td')[0]
+                        .innerText;
+                    window.location.href = `/?activityId=${activityId}`;
+                }
+            },
+
+            toserch() {
+                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/activity/list`;
+                const name = this.name;
+                this.loading4showChangeActivityModel = true;
+                axios
+                    .get(baseURL, {
+                        // baseURL: window.$$domain,
+                        headers: {
+                            Authorization: window.$$Authorization
+                        },
+                        params: {
+                            name
+                        }
+                    })
+                    .then((res) => {
+                        this.loading4showChangeActivityModel = false;
+                        if (res.code === 0) {
+                            this.columns = res.data.heads;
+                            const tabledatas = [];
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                const line = res
+                                    .data
+                                    .data[i]
+                                    .line;
+                                const item = {};
+                                for (let j = 0; j < line.length; j++) {
+                                    item[line[j].key] = line[j].value;
+                                }
+                                tabledatas.push(item);
+                            }
+                            this.asyncTable = tabledatas;
+                        }
+                    })
+                    .catch(() => {
+                        modal.warning(
+                            {title: '接口暂时不可用，请反馈给开发', content: '<p>前端交互开发:管宇星、胡恩超</p><p>服务端开发：张万华、程云、徐亚军、邓家乐、高翔、郑召玺、娄玉龙</p>'}
+                        );
+                    });
+            },
             open4showChangeActivityModel() {
                 this.showChangeActivityModel = true;
             },

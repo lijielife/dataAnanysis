@@ -4,7 +4,7 @@ import HomePage from '../webviews/container/index.vue';
 
 const route = new Router();
 
-route.patch('/', async (ctx) => {
+route.patch('/data-overview', async (ctx) => {
     const inner = await new Promise((resolve) => {
         require.ensure([], (require) => {
             resolve(require('../webviews/dataPreview/index.vue'));
@@ -12,10 +12,10 @@ route.patch('/', async (ctx) => {
     });
     await ctx.render(inner.default);
 });
-route.patch('/global-config', async (ctx) => {
+route.patch('/benefit-analysis', async (ctx) => {
     const inner = await new Promise((resolve) => {
         require.ensure([], (require) => {
-            resolve(require('../webviews/testOne/index.vue'));
+            resolve(require('../webviews/dataPreview/index.vue'));
         });
     });
     await ctx.render(inner.default);

@@ -1060,6 +1060,7 @@
     .overview {
         display: flex;
         padding: 4px;
+        padding-top:10px;
         justify-content: space-between;
         align-items: center;
         font-family: 'Roboto','Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -1082,6 +1083,7 @@
                 padding: 0;
                 margin: 0;
                 position: relative;
+                margin-bottom: 10px;
                 .unit {
                     font-size: 12px;
                     vertical-align: bottom;
@@ -1152,6 +1154,7 @@
                 }
             }
             .descl {
+                padding-right: 10px;
                 border-right: 1px solid #8492A6;
             }
 

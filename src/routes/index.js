@@ -4,7 +4,7 @@ import HomePage from '../webviews/container/index.vue';
 
 const route = new Router();
 
-route.patch('/data-overview', async (ctx) => {
+route.patch('/fe-data-overview', async (ctx) => {
     const inner = await new Promise((resolve) => {
         require.ensure([], (require) => {
             resolve(require('../webviews/dataPreview/index.vue'));

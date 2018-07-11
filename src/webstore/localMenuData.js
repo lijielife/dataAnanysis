@@ -15,13 +15,26 @@ const sideMenuData = [
         describe: '数据概览',
         icon: 'area-chart',
         res_type: 'view',
-        uri: '/data-overview',
-    },
-    {
-        describe: '效益概览',
-        icon: 'bank',
-        res_type: 'view',
-        uri: '/benefit-analysis',
+        children: [
+            {
+                describe: '页面埋点数据',
+                icon: 'appstore-o',
+                uri: '/fe-data-overview',
+                res_type: 'view',
+            },
+            {
+                describe: '服务端埋点数据',
+                icon: 'appstore-o',
+                uri: '/be-data-overview',
+                res_type: 'view',
+            },
+            {
+                describe: '效益概览',
+                icon: 'bank',
+                res_type: 'view',
+                uri: '/benefit-analysis',
+            },
+        ],
     },
     {
         describe: '人群分析',

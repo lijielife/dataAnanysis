@@ -214,9 +214,15 @@
             },
 
             whichLineChartNeedsShow() {
+                let quota = 'basic';
+                if (/be-data-overview/.test(location.hash)) {
+                    quota = 'basic';
+                } else if (/benefit-analysis/.test(location.hash)) {
+                    quota = 'benefit';
+                }
                 axios
                     .get(
-                        `${window.$$commonPath}/api/v1/manager/effect/ue/needshow?activityId=${window.$$_ActivityId}`,
+                        `${window.$$commonPath}/api/v1/manager/effect/ue/needshow?activityId=${window.$$_ActivityId}&quota=${quota}`,
                         {
                             // baseURL: window.$$domain,
                             headers: {

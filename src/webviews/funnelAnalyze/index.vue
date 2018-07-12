@@ -18,22 +18,176 @@
             class="wrapper wrapper-content animated fadeInRight ecommerce"
             style="overflow-x: auto;position: relative;">
             <div class="row" style="min-width: 1000px;">
-                显示漏斗:
-                <nb-select
-                    v-model="select"
-                    style="margin-right:10px;"
-                    @change="selected"
-                    notInjectToBody="notInjectToBody">
-                    <nb-option :value="index" v-for="(item,index) in option" :key="index">{{item}}
-                    </nb-option>
-                </nb-select>
-                <div class="toolsbar"></div>
+                <div class="toolsbar">
+                    <div class="toolsbar-left">
+                        <label>
+                            显示漏斗:</label>
+                        <nb-select
+                            v-model="select"
+                            style="margin-left:10px;margin-right:10px;min-width:100px"
+                            @change="selectFunnel">
+                            <nb-option :value="index" v-for="(item,index) in funnelTypes" :key="index">{{item}}
+                            </nb-option>
+                        </nb-select>
+                        <nb-button icon="plus" style="margin-left:10px;margin-right:10px;">创建漏斗</nb-button>
+                    </div>
+                    <div class="toolsbar-right">
+                        <nb-datepicker
+                            style="margin-left:10px;margin-right:10px;"
+                            v-model="timeranger"
+                            range="range"
+                            size="large"
+                            place="rb"
+                            clearable="clearable"></nb-datepicker>
+                        <div class="iconBtn" style="margin-left:10px;margin-right:10px;">
+                            <nb-icon type="sync" @click="refresh"></nb-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="funnel-charts">
+            <div class="funnel-chart">
+                <div class="title"></div>
+                <div class="bgw" id="testid" style="width:600px;height:600px"></div>
+            </div>
+              <div class="funnel-chart">
+                <div class="title"></div>
+                <div class="bgw" id="testid2" style="width:600px;height:600px"></div>
             </div>
         </section>
     </section>
 </template>
 <script>
-    export default {};
+    import 'echarts/theme/shine';
+
+    require('echarts/lib/chart/bar');
+
+    export default {
+        methods: {
+            selectFunnel() {},
+            refresh() {},
+        },
+        data() {
+            return {
+                timeranger: [],
+                funnelTypes: [],
+                select: '',
+                option: {
+                    tooltip: {
+                        show: false,
+                    },
+                    color: [
+                        '#62d1de', '#54d6b6', '#a6db69',
+                    ],
+                    grid: {
+                        left: '3%',
+                        right: '10%',
+                        containLabel: true,
+                    },
+                    xAxis: [
+                        {
+                            show: false,
+                            type: 'value',
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            name: '转化流程',
+                            nameLocation: 'end', // ---轴名称相对位置
+                            nameTextStyle: {
+                                fontFamily: 'Tahoma',
+                                fontWeight: 'bolder',
+                                align: 'left',
+                                fontSize: 18,
+                                borderColor: '#449933',
+                                borderRadius: 4,
+                                nameGap: 40,
+                                color: '#987654',
+                            },
+                            axisLabel: {
+                                margin: 100,
+                            },
+                            type: 'category',
+                            axisTick: {
+                                show: false,
+                            },
+                            data: [
+                                '周一',
+                                '周二',
+                                '周三',
+                                '周四',
+                                '周五',
+                                '周六',
+                                '周日',
+                            ],
+                        },
+                    ],
+                    series: [
+                        {
+                            barWidth: 40,
+                            barMaxWidth: 200,
+                            name: '收入',
+                            type: 'bar',
+                            stack: '总量',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    color: '#333',
+                                    position: 'right',
+                                    formatter: (params) => {
+                                        console.log(params);
+                                        return `${params.value}%`;
+                                    },
+                                },
+                            },
+                            data: [
+                                100000,
+                                302,
+                                341,
+                                374,
+                                390,
+                                450,
+                                420,
+                            ],
+                        }, {
+                            barWidth: 40,
+                            barMaxWidth: 200,
+                            name: '支出',
+                            type: 'bar',
+                            stack: '总量',
+                            label: {
+                                normal: {
+                                    color: '#333',
+                                    show: true,
+                                    position: 'left',
+                                    formatter: (params) => {
+                                        console.log(params);
+                                        return `${-(+params.value)}`;
+                                    },
+                                },
+                            },
+                            data: [
+                                -100000,
+                                -302,
+                                -341,
+                                -374,
+                                -390,
+                                -450,
+                                -420,
+                            ],
+                        },
+                    ],
+                },
+            };
+        },
+        mounted() {
+            document.getElementById('ajax-loader').style.display = 'block';
+            document.getElementById('mask').style.display = 'block';
+            echarts.init(document.getElementById('testid')).setOption(this.option);
+            echarts.init(document.getElementById('testid2')).setOption(this.option);
+        },
+    };
 </script>
 <style lang="scss" scoped="scoped">
     .panel-body {
@@ -77,9 +231,6 @@
         margin-right: 10px;
         margin-top: 1px;
     }
-    .wrapper-content {
-        padding: 24px 5px 40px;
-    }
     .animated {
         -webkit-animation-duration: 0.5s;
         animation-duration: 0.5s;
@@ -106,5 +257,56 @@
             transform: translateX(0);
         }
 
+    }
+    .toolsbar {
+        border-bottom-width: 0;
+        padding-left: 30px;
+        padding-right: 30px;
+        border-bottom: 1px solid #EBEBEB;
+        display: flex !important;
+        align-items: center;
+        height: 40px;
+        justify-content: space-between;
+    }
+    .toolsbar .toolsbar-left {
+        display: flex;
+        align-items: center;
+    }
+    .toolsbar .toolsbar-right {
+        display: flex;
+        align-items: center;
+    }
+    .row {
+        padding: 0 !important;
+    }
+    .iconBtn {
+        cursor: pointer;
+        border: 1px solid #E9F0F7;
+        box-shadow: none;
+        background: #fff;
+        color: #99A9BF;
+        outline: 0;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        min-width: 38px;
+        font-size: 14px;
+        margin-left: 20px;
+    }
+    .iconBtn:hover {
+        color: #559FF0;
+    }
+    .funnel-charts {
+        display: flex;
+        width: 100%;
+        overflow: auto;
+        height: 600px;
+        justify-content: center;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .funnel-chart{
+        margin-right: 20px;
+        border: 1px solid #99A9BF;
     }
 </style>

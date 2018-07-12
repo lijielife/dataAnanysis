@@ -13,7 +13,8 @@
                         </div>
                         <div class="compYesterday">
                             <p>{{overview.compYesterday.desc}}
-                                <span :class="[overview.compRise.value ? 'up' :'down' ]">
+                                <!-- <span :class="[overview.compRise.value ? 'up' :'down' ]"> -->
+                                     <span class='down'>
                                     {{ overview.compYesterday.value}}
                                 </span>
 
@@ -1114,9 +1115,8 @@
                 }
                 .down {
                     color: #FC6772;
-                    position: absolute;
-                    top: -4px;
-                    left: -7px;
+                    position: relative;
+                    padding-left: 10px;
                     &::before {
                         position: absolute;
                         content: "";
@@ -1127,6 +1127,7 @@
                         border-bottom: 4px solid transparent;
                         border-left: 4px solid transparent;
                         left: -2px;
+                        top:4px;
                     }
                 }
             }

@@ -22,7 +22,6 @@
             :key="k"
             :timeranger="timeranger"></data-analysis>
 
-    
     </section>
 </template>
 <script>
@@ -220,9 +219,10 @@
                 } else if (/benefit-analysis/.test(location.hash)) {
                     quota = 'benefit';
                 }
+
                 axios
                     .get(
-                        `${window.$$commonPath}/api/v1/manager/effect/ue/needshow?activityId=${window.$$_ActivityId}&quota=${quota}`,
+                        `${window.$$commonPath}/api/v1/manager/effect/user/showpanel/curve?activityId=${window.$$_ActivityId}&quota=${quota}`,
                         {
                             // baseURL: window.$$domain,
                             headers: {
@@ -231,7 +231,26 @@
                         },
                     )
                     .then((res) => {
-                        this.filter(res.data);
+                        if (res.code === 0) {
+                            for (let i = 0; i < res.data.length; i++) {
+                                res
+                                    .data[i]
+                                    .path = `${window
+                                        .$$commonPath}/api/v1/manager/effect/common/curve?activityId=${window
+                                        .$$_ActivityId}&itemKeys=${res
+                                        .data[i]
+                                        .itemKeys}`;
+                                res
+                                    .data[i]
+                                    .select = {
+                                        tip: '用户群',
+                                        defaultSelectLabel: '全部',
+                                        defaulSelectKey: '_$$null',
+                                    };
+                            }
+                            this.mianTitleAndId = res.data;
+                        }
+
                         this.createDefaultRrangeOfTime();
                         this.hasavfunc = debounce(this.todosize, 60);
                         window.onresize = () => {

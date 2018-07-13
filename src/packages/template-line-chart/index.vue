@@ -48,7 +48,7 @@
         <section class="data-desc"></section>
         <div
             class="bgw"
-            :id="mianTitleAndId.MountedId"
+            :id="mianTitleAndId.mountedId"
             :style="{width: '100%', height: '300px'}"></div>
 
     </section>
@@ -193,8 +193,7 @@
 
             async getDateStream(startAndend) {
                 this.getOverview();
-                const id = this.mianTitleAndId.MountedId;
-
+                const id = this.mianTitleAndId.mountedId;
                 if (!this.myChart) {
                     this.myChart = window
                         .echarts

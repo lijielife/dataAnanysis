@@ -29,7 +29,10 @@
                             <nb-option :value="index" v-for="(item,index) in funnelTypes" :key="index">{{item}}
                             </nb-option>
                         </nb-select>
-                        <nb-button icon="plus" style="margin-left:10px;margin-right:10px;">创建漏斗</nb-button>
+                        <nb-button
+                            icon="plus"
+                            style="margin-left:10px;margin-right:10px;"
+                            @click="showCreatFunnelModel">创建漏斗</nb-button>
                     </div>
                     <div class="toolsbar-right">
                         <nb-datepicker
@@ -48,14 +51,58 @@
         </section>
         <section class="funnel-charts">
             <div class="funnel-chart">
-                <div class="title"></div>
+                <div class="title">转化流程</div>
                 <div class="bgw" id="testid" style="width:600px;height:600px"></div>
             </div>
-              <div class="funnel-chart">
+            <div class="funnel-chart">
                 <div class="title"></div>
                 <div class="bgw" id="testid2" style="width:600px;height:600px"></div>
             </div>
+            <div class="funnel-chart">
+                <div class="title"></div>
+                <div class="bgw" id="testid3" style="width:600px;height:600px"></div>
+            </div>
         </section>
+        <!-- <nb-table :data="asyncTable" border="border" :scroll="{ y: 300 }"
+        :columns="columns" show-scrollbar="show-scrollbar"></nb-table> -->
+
+        <nb-modal
+            class="createFunnel"
+            :visible="creatFunnel"
+            @ok="saveModal"
+            @cancel="closeModal"
+            title="新增自定义漏斗"
+            :confirm-loading="createFunnelLoading"
+            okText="保存"
+            modal-style="top:10px;">
+            <nb-form direction="horizontal" class="valadate__login-form">
+                <nb-form-item style="display:flex" label="漏斗名称" prop="text">
+                    <nb-input style="width:200px" v-model="funnelname"></nb-input>
+                </nb-form-item>
+                <nb-form-item
+                    style="display:flex;width:90%;align-items:flex-start;"
+                    label="漏斗步骤"
+                    prop="text">
+                    <div class="item" v-for="(v,k) in steps" :key="k" v-if="v.show">
+                        <nb-select style="margin-right:10px;width:200px" v-model="v.value">
+                            <nb-option
+                                :value="index"
+                                v-for="(item,index) in selectOption.option"
+                                :key="index">{{item}}
+                            </nb-option>
+                        </nb-select>
+                        <nb-button icon="minus" @click="delectStep(k)" shape="circle" style="color:"></nb-button>
+                    </div>
+
+                </nb-form-item>
+
+                <nb-form-item style="display:flex;justify-content:center" label="" prop="text">
+                    <nb-button type="primary" @click="addStep">添加</nb-button>
+                </nb-form-item>
+
+            </nb-form>
+        </nb-modal>
+
     </section>
 </template>
 <script>
@@ -67,9 +114,47 @@
         methods: {
             selectFunnel() {},
             refresh() {},
+            showCreatFunnelModel() {
+                this.creatFunnel = true;
+            },
+            delectStep(key) {
+                this.steps[key] = {
+                    show: false,
+                    value: 0,
+                };
+                this.$forceUpdate();
+            },
+            addStep() {
+                this
+                    .steps
+                    .push({ show: true, value: 0 });
+            },
+            saveModal() {
+                for (let i = 0; i < this.steps.length; i++) {
+                    if (this.steps[i].show) {
+                        console.log(this.steps[i].value);
+                    }
+                }
+            },
+            closeModal() {
+                this.creatFunnel = false;
+            },
         },
         data() {
             return {
+                steps: [
+                    {
+                        show: true,
+                        value: 0,
+                    },
+                ],
+                selectOption: {
+                    option: ['广发银行', '温州银行'],
+                },
+
+                funnelname: '',
+                createFunnelLoading: false,
+                creatFunnel: false,
                 timeranger: [],
                 funnelTypes: [],
                 select: '',
@@ -93,7 +178,6 @@
                     ],
                     yAxis: [
                         {
-                            name: '转化流程',
                             nameLocation: 'end', // ---轴名称相对位置
                             nameTextStyle: {
                                 fontFamily: 'Tahoma',
@@ -126,6 +210,7 @@
                     series: [
                         {
                             barWidth: 40,
+                            barMinHeight: 10,
                             barMaxWidth: 200,
                             name: '收入',
                             type: 'bar',
@@ -135,10 +220,7 @@
                                     show: true,
                                     color: '#333',
                                     position: 'right',
-                                    formatter: (params) => {
-                                        console.log(params);
-                                        return `${params.value}%`;
-                                    },
+                                    formatter: params => `${params.value}%`,
                                 },
                             },
                             data: [
@@ -153,6 +235,7 @@
                         }, {
                             barWidth: 40,
                             barMaxWidth: 200,
+                            barMinHeight: 10,
                             name: '支出',
                             type: 'bar',
                             stack: '总量',
@@ -161,10 +244,7 @@
                                     color: '#333',
                                     show: true,
                                     position: 'left',
-                                    formatter: (params) => {
-                                        console.log(params);
-                                        return `${-(+params.value)}`;
-                                    },
+                                    formatter: params => `${-(+params.value)}`,
                                 },
                             },
                             data: [
@@ -184,12 +264,26 @@
         mounted() {
             // document.getElementById('ajax-loader').style.display = 'block';
             // document.getElementById('mask').style.display = 'block';
-            echarts.init(document.getElementById('testid')).setOption(this.option);
-            echarts.init(document.getElementById('testid2')).setOption(this.option);
+            echarts
+                .init(document.getElementById('testid'))
+                .setOption(this.option);
+            echarts
+                .init(document.getElementById('testid2'))
+                .setOption(this.option);
+            echarts
+                .init(document.getElementById('testid3'))
+                .setOption(this.option);
         },
     };
 </script>
 <style lang="scss" scoped="scoped">
+    .funnel-analyze-container {
+        padding-bottom: 100px;
+
+    }
+    .item {
+        margin-bottom: 10px;
+    }
     .panel-body {
         margin-top: 1px;
         background: #fff;
@@ -305,8 +399,16 @@
         padding: 10px;
         cursor: pointer;
     }
-    .funnel-chart{
+    .funnel-chart {
         margin-right: 20px;
         border: 1px solid #99A9BF;
+        position: relative;
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            height: 400px;
+        }
     }
 </style>

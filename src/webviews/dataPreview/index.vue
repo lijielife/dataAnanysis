@@ -276,7 +276,7 @@
                 for (let i = 0; i < this.mianTitleAndId.length; i++) {
                     const id = this
                         .mianTitleAndId[i]
-                        .MountedId;
+                        .mountedId;
                     const mychartContainer = document.getElementById(id);
                     const currentw = window
                         .getComputedStyle(this.container)

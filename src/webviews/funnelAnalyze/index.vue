@@ -182,8 +182,8 @@
             };
         },
         mounted() {
-            document.getElementById('ajax-loader').style.display = 'block';
-            document.getElementById('mask').style.display = 'block';
+            // document.getElementById('ajax-loader').style.display = 'block';
+            // document.getElementById('mask').style.display = 'block';
             echarts.init(document.getElementById('testid')).setOption(this.option);
             echarts.init(document.getElementById('testid2')).setOption(this.option);
         },

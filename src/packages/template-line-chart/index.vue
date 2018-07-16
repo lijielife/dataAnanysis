@@ -282,7 +282,7 @@
             // 画出图形
             drawAccessDataLines() {
                 // 基于准备好的dom，初始化echarts实例
-                const id = this.mianTitleAndId.MountedId;
+                const id = this.mianTitleAndId.mountedId;
                 const triggerAction = (action, selected) => {
                     const legend = [];
 
@@ -936,7 +936,7 @@
                             value: 0
                         };
 
-                        if (num > 1) {
+                        if (num > 1 || this.type) {
                             const other = {};
                             const subitemarr = this.subQuota[key];
 

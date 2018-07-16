@@ -13,8 +13,8 @@
                         </div>
                         <div class="compYesterday">
                             <p>{{overview.compYesterday.desc}}
-                                <!-- <span :class="[overview.compRise.value ? 'up' :'down' ]"> -->
-                                <span class='down'>
+                                <span :class="[overview.compRise.value ? 'up' :'down' ]">
+                               
                                     {{ overview.compYesterday.value}}
                                 </span>
 

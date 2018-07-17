@@ -6,6 +6,7 @@
                     v-model="timeranger"
                     range="range"
                     size="large"
+                    show-time
                     clearable="clearable"></nb-datepicker>
                 <div class="iconBtn">
                     <nb-icon type="sync" @click="refresh"></nb-icon>

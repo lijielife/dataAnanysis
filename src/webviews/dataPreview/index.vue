@@ -17,11 +17,19 @@
             class="iconBtn"> <nb-icon type="sync" @click="refresh"></nb-icon> </div> </div>
             -->
         </div>
-        <data-analysis
+        <div v-if="mianTitleAndId.length">
+             <data-analysis
             :mianTitleAndId="v"
             v-for=" (v,k) in mianTitleAndId"
             :key="k"
-            :timeranger="timeranger"></data-analysis>
+            :timeranger="timeranger">
+        </data-analysis>
+
+        </div>
+       
+        <div v-else style="font-size:20px;height:500px;width:100%;justify-content:center;display:flex;align-items:center;">
+             暂无数据
+        </div>
 
     </section>
 </template>

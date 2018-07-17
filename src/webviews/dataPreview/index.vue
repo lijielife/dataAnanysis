@@ -2,11 +2,11 @@
     <section class="data-container">
         <div class="dashboard-toolbar">
             <div class="pull-left">
+               
                 <nb-datepicker
                     v-model="timeranger"
                     range="range"
                     size="large"
-                    show-time
                     clearable="clearable"></nb-datepicker>
                 <div class="iconBtn">
                     <nb-icon type="sync" @click="refresh"></nb-icon>
@@ -22,7 +22,7 @@
             :mianTitleAndId="v"
             v-for=" (v,k) in mianTitleAndId"
             :key="k"
-            :timeranger="timeranger">
+            :timeranger="copytimeranger">
         </data-analysis>
 
         </div>
@@ -191,6 +191,7 @@
                 },
                 mianTitleAndId: [],
                 timeranger: [],
+                copytimeranger: [],
             };
         },
         created() {
@@ -198,6 +199,13 @@
                 this.todosize();
             });
             this.whichLineChartNeedsShow();
+        },
+
+        watch: {
+            timeranger() {
+                this.copytimeranger = this.timeranger.slice();
+            },
+
         },
 
         methods: {
@@ -295,6 +303,20 @@
                     eventHub.$emit(resizeCanvs);
                 }
             },
+        },
+    
+        mounted() {
+            document.querySelector('.ant-calendar-top').addEventListener('click', (e) => {
+                if (e.target.nodeName === 'A') {
+                    setTimeout(() => {
+                        const temptime = document.querySelector('.ant-calendar-range-picker').value;
+                        const temptimeArr = temptime.split(' ~ ');
+                        const newtimeArr = [`${temptimeArr[0]} 00:00:00`, `${temptimeArr[1]} 23:59:59`];
+                        document.querySelector('.ant-calendar-picker-container').style.display = 'none';
+                        this.copytimeranger = [new Date(`${newtimeArr[0]}`).getTime(), new Date(`${newtimeArr[1]}`).getTime()];
+                    }, 300);
+                }
+            }, false);
         },
     };
 </script>

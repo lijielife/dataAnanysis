@@ -14,10 +14,8 @@
                         <div class="compYesterday">
                             <p>{{overview.compYesterday.desc}}
                                 <span :class="[overview.compRise.value ? 'up' :'down' ]">
-                               
                                     {{ overview.compYesterday.value}}
                                 </span>
-
                             </p>
                         </div>
                     </div>
@@ -56,6 +54,7 @@
 <script>
 
     import 'echarts/theme/shine';
+    import { Notification } from '@u51/miox-vant';
     import eventHub, { resizeCanvs, refresh } from '../../lib/eventhub';
     import { formatDateTime, cloneObj } from '../../utils/helpers';
 
@@ -155,6 +154,13 @@
                     .then((res) => {
                         if (res.code === 0) {
                             this.overview = res.data.indicators;
+                        } else {
+                            Notification.error({
+                                message: '错误提醒',
+                                description: res.message,
+                                duration: 10, // 显示时长  单位s
+                                hoverable: true, // 是否支持悬停，默认true
+                            });
                         }
                     });
             },
@@ -235,13 +241,26 @@
                  *            不然get／set 的钩子不能注册到 id上
                  *            除非自己调用$set
                  */
+
+                    if (respdata.data && respdata.data.data && respdata.data.data.length === 0) {
+                        Notification.error({
+                            message: '错误提醒',
+                            description: '注意查询时间，是否正确选择了时分秒',
+                        });
+                        return;
+                    }
                     this.initial(respdata);
+                    this
+                        .myChart
+                        .hideLoading();
 
                     // this.dwd(); this.drawAccessDataLines();
+                } else {
+                    Notification.error({
+                        message: '错误提醒',
+                        description: respdata.message,
+                    });
                 }
-                this
-                    .myChart
-                    .hideLoading();
             },
 
             async changetimer() {

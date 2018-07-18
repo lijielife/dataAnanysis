@@ -202,8 +202,10 @@
         },
 
         watch: {
-            timeranger() {
-                this.copytimeranger = this.timeranger.slice();
+            timeranger(next) {
+                if (next.length) {
+                    this.copytimeranger = this.timeranger.slice();
+                }
             },
 
         },

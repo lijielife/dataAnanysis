@@ -1,5 +1,6 @@
 const webpackConfig = require('miox-vue2x-webpack-config');
 const alias = require('./alias');
+const webpack = require('webpack');
 
 module.exports = webpackConfig(config => {
     config.set({
@@ -20,7 +21,9 @@ module.exports = webpackConfig(config => {
             ]
         },
         entry: {
-            'vendor': ['miox', 'miox-router', 'miox-vue2x'],
+            'vendor': [
+                'miox', 'miox-router', 'miox-vue2x'
+            ],
             'app': config.resolve('src', 'index.js')
         },
         output: {
@@ -28,15 +31,32 @@ module.exports = webpackConfig(config => {
             filename: '[name].[hash:10].js'
         },
         resolve: {
-            extensions: ['.js', '.vue', '.jsx', '.json', '.css', '.less'],
-            alias: alias,
+            extensions: [
+                '.js',
+                '.vue',
+                '.jsx',
+                '.json',
+                '.css',
+                '.less'
+            ],
+            alias: alias
         },
         plugins: [
             config.html(config.resolve('src', 'index.html')),
             config.resource('web.[hash:10].css'),
             config.chunk({
-                names: [ "vendor", "manifest"]
+                names: ["vendor", "manifest"]
             }),
+            /*
+     * 注入环境变量，可直接在js中使用
+     * */
+            new webpack.DefinePlugin({
+                'process.env': {
+                    NODE_ENV: '"production"',
+                    // 枚举值 prod: 线上 | test: 测试 | pre: 预发 | stable_project： stable环境
+                    BUILD_ENV: JSON.stringify(process.env.BUILD_ENV)
+                }
+            })
         ]
     });
 });

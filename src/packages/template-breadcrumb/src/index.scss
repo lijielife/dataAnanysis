@@ -1,11 +1,18 @@
-.ant-breadcrumb {
-    &>span.view {
-        font-weight: 500;
-    }
-    &>span.view:hover {
-        color: #49a9ee;
-    }
-    &>span.menu {
-        cursor: text !important;
+.header {
+    display: inline-block;
+    cursor: pointer;
+
+    .ant-tooltip {
+        margin-top: 4px;
+        box-sizing: border-box;
+        .activity-title {
+            font-family: "Arial", "Microsoft YaHei","黑体","宋体",sans-serif;
+            color: #333333;
+            padding-left: 20px;
+            margin-right: 10px;
+            font-size: 18px;
+
+        }
     }
 }
+

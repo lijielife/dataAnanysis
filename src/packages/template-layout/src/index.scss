@@ -13,6 +13,7 @@
             background: $hoverSubBg;
             .ant-menu-item {
                 color: $hoverSubColor;
+
             }
         }
     }
@@ -45,8 +46,8 @@
             }
         }
         .left_side {
-            color: #fff;
-            background: #495060;
+            color: #002140;
+            font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
             height: 64px;
             line-height: 64px;
             padding: 0;
@@ -54,15 +55,15 @@
                 min-width: 150px;
                 font-size: 20px;
                 margin: 0 10px;
-                padding-left: 45px;
+                padding-left: 55px;
                 white-space: nowrap;
             }
             .company_logo {
                 position: absolute;
                 left: 10px;
                 img {
-                    width: 35px;
-                    margin-top: 15px;
+                    width: 40px;
+                    margin-top: 10px;
                 }
             }
         }
@@ -74,7 +75,9 @@
                padding: 0 8px;
                .anticon {
                     position: relative;
-                    top: 4px;
+               }
+               i{
+                   font-size: 14px;
                }
                .ant-breadcrumb {
                    display: inline-block;
@@ -96,7 +99,7 @@
         }
     }
     .left_side { 
-        background: #002140;
+       // background: #002140;
     }
     .left_menu_wrap {
         box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);

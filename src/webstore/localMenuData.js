@@ -12,10 +12,41 @@
 
 const sideMenuData = [
     {
-        describe: '用户中心',
-        icon: 'bank',
+        describe: '数据概览',
+        icon: 'area-chart',
         res_type: 'view',
-        uri: '/user-info',
+        children: [
+            {
+                describe: '页面埋点数据',
+                icon: 'appstore-o',
+                uri: '/fe-data-overview',
+                res_type: 'view',
+            },
+            {
+                describe: '服务端埋点数据',
+                icon: 'appstore-o',
+                uri: '/be-data-overview',
+                res_type: 'view',
+            },
+            {
+                describe: '效益概览',
+                icon: 'bank',
+                res_type: 'view',
+                uri: '/benefit-analysis',
+            },
+        ],
+    },
+    {
+        describe: '漏斗分析',
+        icon: 'filter',
+        res_type: 'view',
+        uri: '/funnel-analyze',
+    },
+    {
+        describe: '人群分析',
+        icon: 'usergroup-add',
+        res_type: 'view',
+        uri: '/user-info3',
     },
     {
         describe: '首页',
@@ -26,104 +57,6 @@ const sideMenuData = [
                 describe: '导航',
                 icon: 'appstore-o',
                 uri: '/first-home',
-                res_type: 'view',
-            },
-        ],
-    },
-    {
-        describe: '银行服务管理',
-        icon: 'bank',
-        res_type: 'menu',
-        children: [
-            {
-                describe: '服务',
-                icon: 'appstore-o',
-                uri: '/service-view',
-                res_type: 'view',
-            },
-            {
-                describe: '管理',
-                icon: 'appstore-o',
-                uri: '/service-view',
-                res_type: 'menu',
-                children: [
-                    {
-                        describe: '管理1',
-                        icon: 'appstore-o',
-                        uri: '/manage-view',
-                        res_type: 'view',
-                    },
-                    {
-                        describe: '菜单',
-                        icon: 'appstore-o',
-                        uri: '/manage-view2',
-                        res_type: 'menu',
-                        children: [
-                            {
-                                describe: '子菜单1',
-                                icon: 'appstore-o',
-                                uri: '/child-view',
-                                res_type: 'view',
-                            },
-                            {
-                                describe: '子菜单2',
-                                icon: 'appstore-o',
-                                uri: '/child-view2',
-                                res_type: 'view',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        describe: '运营管理',
-        icon: 'api',
-        res_type: 'menu',
-        children: [
-            {
-                describe: '入口配置管理',
-                icon: 'appstore-o',
-                uri: '/operate-view',
-                res_type: 'view',
-            },
-        ],
-    },
-    {
-        describe: '信用卡还款',
-        icon: 'credit-card',
-        res_type: 'menu',
-        children: [
-            {
-                describe: '储蓄卡还款流水',
-                icon: 'appstore-o',
-                uri: '/testPageOne',
-                res_type: 'view',
-            },
-            {
-                describe: '水电煤缴费流水',
-                icon: 'appstore-o',
-                uri: '/testPageTwo',
-                res_type: 'view',
-            },
-        ],
-    },
-    {
-        describe: '网关管理',
-        icon: 'credit-card',
-        res_type: 'menu',
-        children: [
-            {
-                describe: '全局配置',
-                icon: 'appstore-o',
-                uri: '/global-config',
-                res_type: 'view',
-            },
-            {
-                describe: '路由配置',
-                icon: 'appstore-o',
-                uri: '/router-config',
                 res_type: 'view',
             },
         ],

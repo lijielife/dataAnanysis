@@ -186,7 +186,7 @@
                         任务完成
                     </td>
                     <td
-                        :rowspan="(taskrowspan )"
+                        rowspan="2"
                         style="text-align:left;white-space: nowrap;"
                         v-if="k % 2 === 0">
                         {{tabledata.tasks[k / 2].key}}

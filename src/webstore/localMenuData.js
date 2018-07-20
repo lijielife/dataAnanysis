@@ -34,6 +34,12 @@ const sideMenuData = [
                 res_type: 'view',
                 uri: '/benefit-analysis',
             },
+            {
+                describe: '汇总数据报告',
+                icon: 'file-excel',
+                res_type: 'view',
+                uri: '/report-download',
+            },
         ],
     },
     {

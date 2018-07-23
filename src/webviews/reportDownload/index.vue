@@ -141,10 +141,10 @@
             return {
                 tabledata: {
                     datas: [],
-                    tasks: []
+                    tasks: [],
                 },
                 taskrowspan: 1,
-                showtable: false
+                showtable: false,
             };
         },
         methods: {
@@ -158,14 +158,14 @@
                         `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
                     );
                 }
-            }
+            },
         },
 
         async mounted() {
             // document.getElementById('ajax-loader').style.display = 'block';
             // document.getElementById('mask').style.display = 'block';
 
-            const baseURL = `http://transcript.ops-activityeffect.51.env${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
+            const baseURL = `${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
             // <!-- 加载loading模块 -->
             document
                 .querySelector('#ajax-loader')
@@ -180,8 +180,8 @@
             const respdata = await axios.get(baseURL, {
                 // baseURL: window.$$domain,
                 headers: {
-                    Authorization: window.$$Authorization
-                }
+                    Authorization: window.$$Authorization,
+                },
             });
             document
                 .querySelector('#ajax-loader')
@@ -199,7 +199,7 @@
                 this.taskrowspan = this.tabledata.tasks.length;
                 this.$forceUpdate();
             }
-        }
+        },
     };
 </script>
 

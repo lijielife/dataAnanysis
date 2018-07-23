@@ -16,12 +16,12 @@ const sideMenuData = [
         icon: 'area-chart',
         res_type: 'view',
         children: [
-            {
-                describe: '页面埋点数据',
-                icon: 'appstore-o',
-                uri: '/fe-data-overview',
-                res_type: 'view',
-            },
+            // {
+            //     describe: '页面埋点数据',
+            //     icon: 'appstore-o',
+            //     uri: '/fe-data-overview',
+            //     res_type: 'view',
+            // },
             {
                 describe: '服务端埋点数据',
                 icon: 'appstore-o',
@@ -34,38 +34,38 @@ const sideMenuData = [
                 res_type: 'view',
                 uri: '/benefit-analysis',
             },
-            {
-                describe: '汇总数据报告',
-                icon: 'file-excel',
-                res_type: 'view',
-                uri: '/report-download',
-            },
+            // {
+            //     describe: '汇总数据报告',
+            //     icon: 'file-excel',
+            //     res_type: 'view',
+            //     uri: '/report-download',
+            // },
         ],
     },
-    {
-        describe: '漏斗分析',
-        icon: 'filter',
-        res_type: 'view',
-        uri: '/funnel-analyze',
-    },
-    {
-        describe: '人群分析',
-        icon: 'usergroup-add',
-        res_type: 'view',
-        uri: '/user-info3',
-    },
-    {
-        describe: '首页',
-        icon: 'bank',
-        res_type: 'menu',
-        children: [
-            {
-                describe: '导航',
-                icon: 'appstore-o',
-                uri: '/first-home',
-                res_type: 'view',
-            },
-        ],
-    },
+    // {
+    //     describe: '漏斗分析',
+    //     icon: 'filter',
+    //     res_type: 'view',
+    //     uri: '/funnel-analyze',
+    // },
+    // {
+    //     describe: '人群分析',
+    //     icon: 'usergroup-add',
+    //     res_type: 'view',
+    //     uri: '/user-info3',
+    // },
+    // {
+    //     describe: '首页',
+    //     icon: 'bank',
+    //     res_type: 'menu',
+    //     children: [
+    //         {
+    //             describe: '导航',
+    //             icon: 'appstore-o',
+    //             uri: '/first-home',
+    //             res_type: 'view',
+    //         },
+    //     ],
+    // },
 ];
 export default sideMenuData;

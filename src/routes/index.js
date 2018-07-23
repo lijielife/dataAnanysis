@@ -1,7 +1,5 @@
 import Router from 'miox-router';
 
-import HomePage from '../webviews/container/index.vue';
-
 const route = new Router();
 
 // route.patch('/fe-data-overview', async (ctx) => {

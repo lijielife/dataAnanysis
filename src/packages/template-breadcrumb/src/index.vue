@@ -98,7 +98,7 @@
                 }
             },
             replaceParamVal(paramName, replaceWith) {
-                const re = new RegExp(`(${paramName}=)([^&]*)`, 'gi');
+                const re = new RegExp(`(${paramName}=)([^&#]*)`, 'gi');
                 const oUrl = window.location.href;
                 const nUrl = oUrl.replace(re, `${paramName}=${replaceWith}`);
                 window.location = nUrl;

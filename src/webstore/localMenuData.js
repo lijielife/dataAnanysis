@@ -42,12 +42,12 @@ const sideMenuData = [
             // },
         ],
     },
-    {
-        describe: '漏斗分析',
-        icon: 'filter',
-        res_type: 'view',
-        uri: '/funnel-analyze',
-    },
+    // {
+    //     describe: '漏斗分析',
+    //     icon: 'filter',
+    //     res_type: 'view',
+    //     uri: '/funnel-analyze',
+    // },
     // {
     //     describe: '人群分析',
     //     icon: 'usergroup-add',

@@ -9,7 +9,7 @@
 module.exports = {
     '/ssoagentlogin': {
       changeOrigin: true,
-      target: 'http://ops-activityeffect.st.51.nb:8080', //stable服务端地址
+      target: 'http://numfour.ops-activityeffect.51.env', //stable服务端地址
       headers:{
             'Proxy-Visit':'VUCBa23KrOkFFczlrR3Lvu%2BAFZ9eX9hv', // iam 登录需要
         },
@@ -21,7 +21,7 @@ module.exports = {
   // target:'http://ops-activityeffect.st.51.nb:8080',
     // target:  process.env.BUILD_ENV === 'prod' ? 'http://opsplate.u51-inc.com' : 'http://06yiqi.ops-activityeffect.51.env', //连线上
    // target:  process.env.BUILD_ENV === 'prod' ? 'http://opsplate.u51-inc.com' : 'http://ops-activityeffect.st.51.nb:8080', //
-    target:  process.env.BUILD_ENV === 'prod' ? 'http://opsplate.u51-inc.com' : 'http://prosummary.ops-activityeffect.51.env', //连线上
+    target:  process.env.BUILD_ENV === 'prod' ? 'http://opsplate.u51-inc.com' : 'http://numfour.ops-activityeffect.51.env', //连线上
     },
              
 };

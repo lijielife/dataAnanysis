@@ -128,7 +128,7 @@
                 <li></li>
                 <li></li>
             </ul>
-            <p>正在登录中</p>
+            <p>正在加载中</p>
         </div>
         <div id="mask"></div>
         <!-- 加载loading模块 -->

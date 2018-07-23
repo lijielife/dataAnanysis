@@ -68,6 +68,7 @@ const store = new Vuex.Store({
         * @desc: 设置导航菜单选中项
         */
         setMenuSelectKey(state, key) {
+            console.log(state, key);
             state.menuSelectKey = key;
         },
         /*

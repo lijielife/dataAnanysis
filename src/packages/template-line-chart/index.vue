@@ -6,7 +6,11 @@
                     <a>{{mianTitleAndId.title}}</a>
                 </div>
                 <div class="overview" v-if="overview">
+
                     <div class="section1">
+                        <div>
+                            {{day2text(rangeDate[1])}}
+                        </div>
                         <div class="today">
                             {{ overview.today.value}}
                             <span class="unit">{{ overview.unit.value }}</span>
@@ -67,12 +71,9 @@
         watch: {
             timeranger(next) {
                 this.rangeDate = next.slice();
-                if (this.mianTitleAndId.isTPlusone) {
-                    const nowTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-                    this.rangeDate[1] = nowTime;
-                    this.rangeDate[0] = this.rangeDate[1] - (7 * 24 * 60 * 60 * 1000);
+                if (this.rangeDate.length) {
+                    this.toshow();
                 }
-                this.toshow();
             },
         },
         props: [
@@ -105,6 +106,7 @@
                 downUrl: '',
                 subQuota: {},
                 overview: false,
+                daytext: '今日',
             };
         },
 
@@ -112,12 +114,11 @@
             this.rangeDate = this
                 .timeranger
                 .slice();
-            if (this.mianTitleAndId.isTPlusone) {
-                const nowTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-                this.rangeDate[1] = nowTime;
-                this.rangeDate[0] = this.rangeDate[1] - (7 * 24 * 60 * 60 * 1000);
+
+            if (this.rangeDate.length) {
+                this.toshow();
             }
-            this.toshow();
+
             eventHub.$on(resizeCanvs, () => {
                 if (this.bastoptions) {
                     this
@@ -139,10 +140,22 @@
          */
 
         methods: {
+            day2text(end) {
+                const currentMonth = new Date().getMonth();
+                const currentDay = new Date().getDate();
+                const isSameCurrentMonth = new Date(end).getMonth() === currentMonth;
+                const isSameCurrentDay = new Date(end).getDate() === currentDay;
+                if (isSameCurrentMonth && isSameCurrentDay) {
+                    return '今日';
+                }
+
+                return `${new Date(end).getMonth() + 1}月${new Date(end).getDate()}日`;
+            },
             toeval(val) {
                 return eval(val);
             },
             getOverview() {
+                // const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}`;
                 const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
                 axios
                     .get(baseURL, {
@@ -226,6 +239,7 @@
                 } else {
                     baseURL += `${startAndend}`;
                 }
+                //  baseURL += `&sourceItem=${this.mianTitleAndId.sourceItem}`;
                 const respdata = await axios.get(baseURL, {
                     // baseURL: window.$$domain,
                     headers: {
@@ -243,10 +257,7 @@
                  */
 
                     if (respdata.data && respdata.data.data && respdata.data.data.length === 0) {
-                        Notification.error({
-                            message: '错误提醒',
-                            description: '注意查询时间，是否正确选择了时分秒',
-                        });
+                        Notification.error({ message: '错误提醒', description: '注意查询时间，是否正确选择了时分秒' });
                         return;
                     }
                     this.initial(respdata);
@@ -256,10 +267,7 @@
 
                     // this.dwd(); this.drawAccessDataLines();
                 } else {
-                    Notification.error({
-                        message: '错误提醒',
-                        description: respdata.message,
-                    });
+                    Notification.error({ message: '错误提醒', description: respdata.message });
                 }
             },
 

@@ -92,122 +92,6 @@
 
             </nb-form>
         </nb-modal>
-        <div style="width:100%;overflow-x:auto;position:relative">
-            <table class="mytable">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th style="width:160px;">
-                        <div class="out">
-                            <b>指标</b>
-                            <em>日期</em>
-                        </div>
-                    </th>
-                    <th v-for="(v,k) in tabledata.colHeads">
-                        {{ (v.value) }}
-                    </th>
-                </tr>
-                <tr class="assessDetail">
-                    <td rowspan="10">
-                        活动基础数据
-                    </td>
-                    <td rowspan="4">
-                        UV
-                    </td>
-                    <td>访客人数</td>
-                    <td v-for="(v,k) in tabledata.datas[0]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>参与人数</td>
-                    <td v-for="(v,k) in tabledata.datas[1]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-
-                    <td>领取奖品人数</td>
-                    <td v-for="(v,k) in tabledata.datas[2]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-
-                    <td>奖品奖品人数</td>
-                    <td v-for="(v,k) in tabledata.datas[3]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td rowspan="6">
-                        PV
-                    </td>
-                    <td>访客次数</td>
-                    <td v-for="(v,k) in tabledata.datas[4]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>参与次数</td>
-                    <td v-for="(v,k) in tabledata.datas[5]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>领取奖品次数</td>
-                    <td v-for="(v,k) in tabledata.datas[6]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>奖品使用次数</td>
-                    <td v-for="(v,k) in tabledata.datas[7]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>活动发放成本</td>
-                    <td v-for="(v,k) in tabledata.datas[8]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>实际使用成本</td>
-                    <td v-for="(v,k) in tabledata.datas[9]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr
-                    class="assessDetail"
-                    v-if="tabledata.tasks.length"
-                    v-for="(v,k) in (taskrowspan * 2)">
-                    <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
-                        任务完成
-                    </td>
-                    <td
-                        rowspan="2"
-                        style="text-align:left;white-space: nowrap;"
-                        v-if="k % 2 === 0">
-                        {{tabledata.tasks[k / 2].key}}
-
-                    </td>
-                    <td>{{ (k%2) === 0 ? '完成人数' : '完成次数'}}
-                    </td>
-                    <td
-                        v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
-                        {{v}}
-                    </td>
-                </tr>
-
-            </table>
-            <div class="ant-table-scroll-tip">
-                <div class="ant-table-scroll-tip-horizontal ant-flex">
-                    <i class="anticon anticon-right  "></i>
-                </div>
-            </div>
-
-        </div>
 
     </section>
 </template>
@@ -249,11 +133,6 @@
         },
         data() {
             return {
-                tabledata: {
-                    datas: [],
-                    tasks: [],
-                },
-                taskrowspan: 1,
                 steps: [
                     {
                         show: true,
@@ -380,7 +259,7 @@
                 .init(document.getElementById('testid'))
                 .setOption(this.option);
 
-            const baseURL = `http://transcript.ops-activityeffect.51.env${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
+            const baseURL = `${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
 
             const respdata = await axios.get(baseURL, {
                 // baseURL: window.$$domain,

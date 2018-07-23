@@ -118,6 +118,20 @@
                 <i class="anticon anticon-right  "></i>
             </div>
         </div>
+        <!-- 加载loading模块 -->
+        <div id="ajax-loader" style="display: none;">
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <p>正在登录中</p>
+        </div>
+        <div id="mask"></div>
+        <!-- 加载loading模块 -->
     </div>
 
 </template>
@@ -127,10 +141,10 @@
             return {
                 tabledata: {
                     datas: [],
-                    tasks: [],
+                    tasks: []
                 },
                 taskrowspan: 1,
-                showtable: false,
+                showtable: false
             };
         },
         methods: {
@@ -144,7 +158,7 @@
                         `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
                     );
                 }
-            },
+            }
         },
 
         async mounted() {
@@ -152,13 +166,32 @@
             // document.getElementById('mask').style.display = 'block';
 
             const baseURL = `http://transcript.ops-activityeffect.51.env${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
+            // <!-- 加载loading模块 -->
+            document
+                .querySelector('#ajax-loader')
+                .style
+                .display = 'block';
+            document
+                .querySelector('#mask')
+                .style
+                .display = 'block';
+            // <!-- 加载loading模块 -->
 
             const respdata = await axios.get(baseURL, {
                 // baseURL: window.$$domain,
                 headers: {
-                    Authorization: window.$$Authorization,
-                },
+                    Authorization: window.$$Authorization
+                }
             });
+            document
+                .querySelector('#ajax-loader')
+                .style
+                .display = 'none';
+            document
+                .querySelector('#mask')
+                .style
+                .display = 'none';
+
             this.showtable = true;
 
             if (respdata.code === 0) {
@@ -166,11 +199,23 @@
                 this.taskrowspan = this.tabledata.tasks.length;
                 this.$forceUpdate();
             }
-        },
+        }
     };
 </script>
 
 <style lang="scss" scoped="scoped">
+/**加载组件 */
+#ajax-loader{z-index:9999;display:none;position:fixed;margin:auto;left:0;right:0;top:40%;width:120px;height:10px;padding:68px 20px 55px 17px;border:1px solid #6FD3B3;border-radius:4px;background:rgba(255,255,255,.9)}@media (max-width:1050px){#ajax-loader{left:42px}}#ajax-loader p{font-size:13px;text-align:center;color:#2DCA93;line-height:40px}#ajax-loader ul{margin:0;list-style:none;width:90px;height:65px;position:relative;padding:0;height:10px;margin: 0 auto;}#ajax-loader ul li{position:absolute;width:4px;border-radius:2px;height:0;background-color:#2DCA93;bottom:0}@keyframes sequence1{0%{height:10px}50%{height:50px}100%{height:10px}}@keyframes sequence2{0%{height:20px}50%{height:65px}100%{height:20px}}#ajax-loader li:nth-child(1){left:2px;animation:sequence1 1s ease infinite .1s}#ajax-loader li:nth-child(2){animation-name:sequence2}#ajax-loader li:nth-child(2){left:17px;animation:sequence1 1s ease infinite .2s}#ajax-loader li:nth-child(4){animation-name:sequence2}#ajax-loader li:nth-child(3){left:32px;animation:sequence1 1s ease infinite .3s}#ajax-loader li:nth-child(6){animation-name:sequence2}#ajax-loader li:nth-child(4){left:47px;animation:sequence1 1s ease infinite .4s}#ajax-loader li:nth-child(8){animation-name:sequence2}#ajax-loader li:nth-child(5){left:62px;animation:sequence1 1s ease infinite .5s}#ajax-loader li:nth-child(10){animation-name:sequence2}#ajax-loader li:nth-child(6){left:77px;animation:sequence1 1s ease infinite .6s}#ajax-loader li:nth-child(12){animation-name:sequence2}
+#mask{
+    display: none;
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background-color:rgba(144,144,144,.6);
+}
+
     .ant-table-scroll-tip-horizontal {
         top: 0;
         right: 0;

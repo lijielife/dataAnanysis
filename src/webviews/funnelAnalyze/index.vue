@@ -20,14 +20,14 @@
             <div class="row" style="min-width: 1000px;">
                 <div class="toolsbar">
                     <div class="toolsbar-left">
-                        <label>
-                            显示漏斗:</label>
-                        <nb-select
-                            v-model="select"
-                            style="margin-left:10px;margin-right:10px;min-width:100px"
-                            @change="selectFunnel">
-                            <nb-option :value="index" v-for="(item,index) in funnelTypes" :key="index">{{item}}
-                            </nb-option>
+                        漏斗类型:
+                        <nb-select v-model="select"  @change="createFunnel" filterable placeholder="请选择漏斗类型">
+                                <nb-option
+                                    v-for="item in funnellists"
+                                    :key="item.autoId"
+                                    :label="item.name"
+                                    :value="item.autoId"></nb-option>
+
                         </nb-select>
                         <nb-button
                             icon="plus"
@@ -51,7 +51,7 @@
         </section>
         <section class="funnel-charts">
             <div class="funnel-chart">
-                <div class="title">转化流程</div>
+                <div class="title" v-show="typeof select !== '' && timeranger.length ">转化流程</div>
                 <div class="bgw" id="testid" style="width:600px;height:600px"></div>
             </div>
         </section>
@@ -74,14 +74,27 @@
                     label="漏斗步骤"
                     prop="text">
                     <div class="item" v-for="(v,k) in steps" :key="k" v-if="v.show">
-                        <nb-select style="margin-right:10px;width:200px" v-model="v.value">
-                            <nb-option
-                                :value="index"
-                                v-for="(item,index) in selectOption.option"
-                                :key="index">{{item}}
-                            </nb-option>
+                        <nb-select
+                            v-model="v.value"
+                            style="margin-left:2px;margin-right:10px;width:200px">
+                            <nb-option-group
+                                v-for="group in taglists"
+                                :key="group.label"
+                                :label="group.label">
+                             
+                                <nb-option
+                                    v-for="item in group.options"
+                                    :key="item.value.key"
+                                    :label="item.label"
+                                    :value="item.value"></nb-option>
+                            </nb-option-group>
                         </nb-select>
-                        <nb-button icon="minus" @click="delectStep(k)" shape="circle" style="color:"></nb-button>
+                        <nb-button
+                            icon="minus"
+                            v-show="showTags>1"
+                            @click="delectStep(k)"
+                            shape="circle"
+                            style="color:"></nb-button>
                     </div>
 
                 </nb-form-item>
@@ -97,12 +110,72 @@
 </template>
 <script>
     import 'echarts/theme/shine';
+    import { mapActions, mapGetters } from 'vuex';
+    import { modal, message } from '@u51/miox-vant';
+    import { formatDateTime } from '../../utils/helpers';
 
+    import store from '../../webstore/index';
 
     require('echarts/lib/chart/bar');
 
     export default {
+        computed: {
+            ...mapGetters({ userInfo: 'getUserInfo' }),
+        },
+        watch: {
+            timeranger() {
+                if (this.select) {
+                    this.createFunnel(this.select);
+                }
+            },
+        },
+        store,
         methods: {
+            paintFunnel() {
+                echarts
+                    .init(document.getElementById('testid'))
+                    .setOption(this.option);
+            },
+            createFunnel(c) {
+                if (!this.timeranger.length) {
+                    message.warning('请选择时间范围');
+                    return;
+                }
+                const quota = 'uv';
+                const funnelId = c;
+                const start = formatDateTime(this.timeranger[0], 6);
+                const end = formatDateTime(this.timeranger[1], 6);
+                const activityId = window.$$_ActivityId;
+
+                // GET /ops-activityeffect/api/v1/manager/effect/funnel/paint
+                const url = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/paint?quota=${quota}&funnelId=${funnelId}&start=${start}&end=${end}&activityId=${activityId}`;
+                const a = modal.spin();
+                axios({
+                    url,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                }).then((res) => {
+                    a.close();
+                    if (res.code === 0) {
+                        const datal = [];
+                        const datar = [];
+                        const title = [];
+
+                        // 对0的特殊处理  0 === 0.0001
+                        for (let i = 0; i < res.data.length; i++) {
+                            title.push((res.data[i].name));
+                            datal.push((res.data[i].value === 0 ? 0.0001 : res.data[i].value));
+                            datar.push(-(res.data[i].value === 0 ? 0.0001 : res.data[i].value));
+                        }
+                        this.option.series[0].data = datal;
+                        this.option.series[1].data = datar;
+                        this.option.yAxis[0].data = title;
+                        this.paintFunnel();
+                    }
+                });
+            },
+            ...mapActions(['getUserInfo', 'getMenus']),
             selectFunnel() {},
             refresh() {},
             showCreatFunnelModel() {
@@ -113,19 +186,49 @@
                     show: false,
                     value: 0,
                 };
+                this.showTags--;
                 this.$forceUpdate();
             },
             addStep() {
                 this
                     .steps
-                    .push({ show: true, value: 0 });
+                    .push({ show: true, value: '' });
+                this.showTags++;
             },
             saveModal() {
+                const body = {
+                    activityId: window.$$_ActivityId,
+                    createUser: this.userInfo.account,
+                    items: [
+                        // {     desc: 'string',     key: 'string',     value: {}, },
+                    ],
+                    name: this.funnelname,
+                };
                 for (let i = 0; i < this.steps.length; i++) {
                     if (this.steps[i].show) {
-                        console.log(this.steps[i].value);
+                        body
+                            .items
+                            .push({
+                                ...this
+                                    .steps[i]
+                                    .value,
+                            });
                     }
                 }
+    
+                // POST /ops-activityeffect/api/v1/manager/effect/funnel/add
+                const a = modal.spin();
+                axios({
+                    method: 'post',
+                    data: body,
+                    url: 'http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/add',
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                }).then((res) => {
+                    a.close();
+                    console.log(res);
+                });
             },
             closeModal() {
                 this.creatFunnel = false;
@@ -133,14 +236,17 @@
         },
         data() {
             return {
+                showTags: 1,
+                taglists: [],
+                funnellists: [],
                 steps: [
                     {
                         show: true,
-                        value: 0,
+                        value: '',
                     },
                 ],
                 selectOption: {
-                    option: ['广发银行', '温州银行'],
+                    option: [],
                 },
 
                 funnelname: '',
@@ -202,6 +308,7 @@
                         {
                             barWidth: 40,
                             barMinHeight: 10,
+    
                             barMaxWidth: 200,
                             name: '收入',
                             type: 'bar',
@@ -211,7 +318,15 @@
                                     show: true,
                                     color: '#333',
                                     position: 'right',
-                                    formatter: params => `${params.value}%`,
+                                    formatter: (params) => {
+                                        if (params.dataIndex === this.option.series[0].data.length - 1) {
+                                            return '100%';
+                                        }
+                                        if (this.option.series[0].data[params.dataIndex + 1] === 0.001) {
+                                            return '无意义';
+                                        }
+                                        return `${(((params.value === 0.001 ? 0 : params.value) / this.option.series[0].data[this.option.series[0].data.length - 1]) * 100).toFixed(0)}%`;
+                                    },
                                 },
                             },
                             data: [
@@ -235,7 +350,7 @@
                                     color: '#333',
                                     show: true,
                                     position: 'left',
-                                    formatter: params => `${-(+params.value)}`,
+                                    formatter: params => `${-(+params.value === -0.0001 ? 0 : params.value)}`,
                                 },
                             },
                             data: [
@@ -252,28 +367,112 @@
                 },
             };
         },
-        async mounted() {
+        mounted() {
             // document.getElementById('ajax-loader').style.display = 'block';
             // document.getElementById('mask').style.display = 'block';
-            echarts
-                .init(document.getElementById('testid'))
-                .setOption(this.option);
-
-            const baseURL = `${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
-
-            const respdata = await axios.get(baseURL, {
-                // baseURL: window.$$domain,
-                headers: {
-                    Authorization: window.$$Authorization,
-                },
-            });
-
-            if (respdata.code === 0) {
-                this.tabledata = respdata.data;
-                this.taskrowspan = this.tabledata.tasks.length;
-                console.log('this.taskrowspan ', this.taskrowspan);
-                this.$forceUpdate();
-            }
+    
+            // const baseURL =
+            // `${window.$$commonPath}/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
+            // 获取漏斗标签列表
+            const baseURLTags = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
+            axios
+                .get(baseURLTags, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                })
+                .then((respdata) => {
+                    respdata = {
+                        code: 0,
+                        data: [
+                            {
+                                key: 'VIEW_001',
+                                desc: 'A按钮曝光事件埋点',
+                                value: 0,
+                            }, {
+                                key: 'EC002',
+                                desc: 'B按钮点击事件埋点',
+                                value: 0,
+                            }, {
+                                key: 'resource',
+                                desc: '新增曝光数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'visitor',
+                                desc: '新增访客数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'join',
+                                desc: '新增参与人数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'finishtask',
+                                desc: '新增完成任务人数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'predrawprize',
+                                desc: '预领奖人数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'drawprize',
+                                desc: '新增领奖人数(UV)',
+                                value: 1,
+                            }, {
+                                key: 'drawcost',
+                                desc: '新增活动发放成本(UV)',
+                                value: 1,
+                            }, {
+                                key: 'usecost',
+                                desc: '新增实际使用成本(UV)',
+                                value: 1,
+                            }, {
+                                key: 'prizeuse',
+                                desc: '新增奖品使用人数(UV)',
+                                value: 1,
+                            },
+                        ],
+                        success: true,
+                    };
+                    if (respdata.code === 0) {
+                        const labelObj = {
+                            0: {
+                                label: '源数据',
+                                options: [],
+                            },
+                            1: {
+                                label: '聚合类数据',
+                                options: [],
+                            },
+                        };
+                        const resd = respdata.data;
+                        for (let i = 0; i < resd.length; i++) {
+                            labelObj[resd[i].value]
+                                .options
+                                .push({ value: {
+                                    value: resd[i].value,
+                                    key: resd[i].key,
+                                },
+                                label: resd[i].desc });
+                        }
+                        this.taglists = labelObj;
+                    }
+                });
+    
+            //  获取漏斗列表
+            const baseURLFunnelTypes = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/list?activityId=${window.$$_ActivityId}`;
+            axios
+                .get(baseURLFunnelTypes, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                })
+                .then((respdata) => {
+                    if (respdata.code === 0) {
+                        this.funnellists = respdata.data;
+                    }
+                });
         },
     };
 </script>
@@ -500,7 +699,6 @@
     .funnel-charts {
         display: flex;
         width: 100%;
-        overflow: auto;
         height: 600px;
         justify-content: center;
         padding: 10px;

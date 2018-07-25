@@ -17,6 +17,7 @@
     "@u51/pg": "^3.4.10",
     "axios": "^0.17.1",
     "echarts": "^4.1.0",
+    "element-ui": "^2.4.4",
     "miox": "^5.1.9",
     "miox-compose": "^5.1.9",
     "miox-convert": "^5.0.39",

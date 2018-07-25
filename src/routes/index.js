@@ -2,14 +2,14 @@ import Router from 'miox-router';
 
 const route = new Router();
 
-// route.patch('/fe-data-overview', async (ctx) => {
-//     const inner = await new Promise((resolve) => {
-//         require.ensure([], (require) => {
-//             resolve(require('../webviews/dataPreview/index.vue'));
-//         });
-//     });
-//     await ctx.render(inner.default);
-// });
+route.patch('/fe-data-overview', async (ctx) => {
+    const inner = await new Promise((resolve) => {
+        require.ensure([], (require) => {
+            resolve(require('../webviews/dataPreview/index.vue'));
+        });
+    });
+    await ctx.render(inner.default);
+});
 route.patch('/be-data-overview', async (ctx) => {
     const inner = await new Promise((resolve) => {
         require.ensure([], (require) => {

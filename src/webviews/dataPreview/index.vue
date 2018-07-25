@@ -225,21 +225,21 @@
                 }
             },
             async createDefaultRrangeOfTime() {
-                // const res = await axios.get(`${window.$$commonPath}/api/v1/manager/effect/activity/getQueryDate?activityId=${window.$$_ActivityId}`,
-                //     {
-                //         // baseURL: window.$$domain,
-                //         headers: {
-                //             Authorization: window.$$Authorization,
-                //         },
-                //     });
+                const res = await axios.get(`${window.$$commonPath}/api/v1/manager/effect/activity/getQueryDate?activityId=${window.$$_ActivityId}`,
+                    {
+                        // baseURL: window.$$domain,
+                        headers: {
+                            Authorization: window.$$Authorization,
+                        },
+                    });
 
-                // if (res.code === 0) {
-                //     this.timeranger = [res.data.start, res.data.end];
-                // }
-                const now = Date.now();
-                const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+                if (res.code === 0) {
+                    this.timeranger = [res.data.start, res.data.end];
+                }
+                // const now = Date.now();
+                // const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
 
-                this.timeranger = [sevenDaysAgo, now];
+                // this.timeranger = [sevenDaysAgo, now];
             },
 
             whichLineChartNeedsShow() {
@@ -248,6 +248,8 @@
                     quota = 'basic';
                 } else if (/benefit-analysis/.test(location.hash)) {
                     quota = 'benefit';
+                } else if (/fe-data-overview/.test(location.hash)) {
+                    quota = 'trackSource';
                 }
 
                 axios

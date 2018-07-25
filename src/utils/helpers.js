@@ -92,6 +92,7 @@ export function getActivityId(activityId) {
     } else {
         window.$$_ActivityId = PG.QS.activityId;
     }
+    console.log(' window.$$_ActivityId ', window.$$_ActivityId);
 }
 
 /*

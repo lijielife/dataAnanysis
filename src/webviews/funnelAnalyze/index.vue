@@ -21,12 +21,16 @@
                 <div class="toolsbar">
                     <div class="toolsbar-left">
                         漏斗类型:
-                        <nb-select v-model="select"  @change="createFunnel" filterable placeholder="请选择漏斗类型">
-                                <nb-option
-                                    v-for="item in funnellists"
-                                    :key="item.autoId"
-                                    :label="item.name"
-                                    :value="item.autoId"></nb-option>
+                        <nb-select
+                            v-model="select"
+                            @change="createFunnel"
+                            filterable="filterable"
+                            placeholder="请选择漏斗类型">
+                            <nb-option
+                                v-for="item in funnellists"
+                                :key="item.autoId"
+                                :label="item.name"
+                                :value="item.autoId"></nb-option>
 
                         </nb-select>
                         <nb-button
@@ -51,10 +55,29 @@
         </section>
         <section class="funnel-charts">
             <div class="funnel-chart">
-                <div class="title" v-show="typeof select !== '' && timeranger.length ">转化流程</div>
+                <div class="title" v-show="select && timeranger.length ">转化流程</div>
                 <div class="bgw" id="testid" style="width:600px;height:600px"></div>
             </div>
         </section>
+
+        <table class="nice" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th v-for="(v,k) in tableHeadList" :key="k">
+                        {{v.value}}
+                    </th>
+                    <!-- <th> 参与人数 </th> <th> 参与次数 </th> <th> 任务完成人数 </th> <th> 任务完成次数 </th> <th>
+                    任务完成率(按人数) </th> <th> 任务完成率(按次数) </th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(v,k) in funnelNewDTOListTemp" :key="k">
+                    <td v-for="(vv,kk) in v" :key="kk">
+                       {{vv}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <nb-modal
             class="createFunnel"
@@ -81,12 +104,11 @@
                                 v-for="group in taglists"
                                 :key="group.label"
                                 :label="group.label">
-                             
                                 <nb-option
                                     v-for="item in group.options"
                                     :key="item.value.key"
                                     :label="item.label"
-                                    :value="item.value"></nb-option>
+                                    :value="JSON.stringify(item.value)"></nb-option>
                             </nb-option-group>
                         </nb-select>
                         <nb-button
@@ -111,7 +133,7 @@
 <script>
     import 'echarts/theme/shine';
     import { mapActions, mapGetters } from 'vuex';
-    import { modal, message } from '@u51/miox-vant';
+    import { modal, message, Notification } from '@u51/miox-vant';
     import { formatDateTime } from '../../utils/helpers';
 
     import store from '../../webstore/index';
@@ -128,9 +150,14 @@
                     this.createFunnel(this.select);
                 }
             },
+
+            steps() {
+                console.log(this.steps);
+            },
         },
         store,
         methods: {
+            paintTable() {},
             paintFunnel() {
                 echarts
                     .init(document.getElementById('testid'))
@@ -148,7 +175,7 @@
                 const activityId = window.$$_ActivityId;
 
                 // GET /ops-activityeffect/api/v1/manager/effect/funnel/paint
-                const url = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/paint?quota=${quota}&funnelId=${funnelId}&start=${start}&end=${end}&activityId=${activityId}`;
+                const url = `${window.$$commonPath}/api/v1/manager/effect/funnel/getFunnelDetail?quota=${quota}&funnelId=${funnelId}&start=${start}&end=${end}&activityId=${activityId}`;
                 const a = modal.spin();
                 axios({
                     url,
@@ -158,20 +185,52 @@
                 }).then((res) => {
                     a.close();
                     if (res.code === 0) {
+                        console.log(res);
                         const datal = [];
                         const datar = [];
                         const title = [];
-
-                        // 对0的特殊处理  0 === 0.0001
-                        for (let i = 0; i < res.data.length; i++) {
-                            title.push((res.data[i].name));
-                            datal.push((res.data[i].value === 0 ? 0.0001 : res.data[i].value));
-                            datar.push(-(res.data[i].value === 0 ? 0.0001 : res.data[i].value));
+                        const funnelNewDTOList = res.data.funnelNewDTOList || [];
+                        const funnelCustomTableDTOList = res.data.tableDataList || [];
+                        this.tableHeadList = res.data.tableHeadList || [];
+                        const funnelNewDTOListTemp = [];
+                        for (let j = 0; j < funnelCustomTableDTOList.length; j++) {
+                            const temp = [];
+                            for (let i = 0; i < this.tableHeadList.length; i++) {
+                                const val = funnelCustomTableDTOList[j][this.tableHeadList[i].key];
+                                temp.push(val);
+                            }
+                            funnelNewDTOListTemp.push(temp);
                         }
-                        this.option.series[0].data = datal;
-                        this.option.series[1].data = datar;
-                        this.option.yAxis[0].data = title;
+                        this.funnelNewDTOListTemp = funnelNewDTOListTemp;
+    
+                        // 对0的特殊处理  0 === 0.0001
+                        for (let i = 0; i < funnelNewDTOList.length; i++) {
+                            title.push((funnelNewDTOList[i].name));
+                            datal.push((
+                                funnelNewDTOList[i].value === 0
+                                    ? 0.0001
+                                    : funnelNewDTOList[i].value
+                            ));
+                            datar.push(-(
+                                funnelNewDTOList[i].value === 0
+                                    ? 0.0001
+                                    : funnelNewDTOList[i].value
+                            ));
+                        }
+                        this
+                            .option
+                            .series[0]
+                            .data = datal;
+                        this
+                            .option
+                            .series[1]
+                            .data = datar;
+                        this
+                            .option
+                            .yAxis[0]
+                            .data = title;
                         this.paintFunnel();
+                        this.paintTable();
                     }
                 });
             },
@@ -193,9 +252,17 @@
                 this
                     .steps
                     .push({ show: true, value: '' });
+
                 this.showTags++;
             },
             saveModal() {
+                if (!this.funnelname) {
+                    Notification.success({
+                        message: '消息提示', description: '请填写漏斗名称', duration: 4, // 显示时长  单位s
+                    });
+
+                    return;
+                }
                 const body = {
                     activityId: window.$$_ActivityId,
                     createUser: this.userInfo.account,
@@ -209,25 +276,37 @@
                         body
                             .items
                             .push({
-                                ...this
-                                    .steps[i]
-                                    .value,
+                                ...JSON.parse(this.steps[i].value),
                             });
                     }
                 }
-    
+
                 // POST /ops-activityeffect/api/v1/manager/effect/funnel/add
                 const a = modal.spin();
                 axios({
                     method: 'post',
                     data: body,
-                    url: 'http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/add',
+                    url: `${window.$$commonPath}/api/v1/manager/effect/funnel/add`,
                     headers: {
                         Authorization: window.$$Authorization,
                     },
                 }).then((res) => {
                     a.close();
-                    console.log(res);
+                    Notification.success({
+                        message: '消息提示', description: '漏斗类型保存成功', duration: 4, // 显示时长  单位s
+                    });
+
+                    this
+                        .funnellists
+                        .push({ autoId: res.data, name: body.name });
+                    this.creatFunnel = false;
+                    this.funnelname = '';
+                    this.steps = [
+                        {
+                            show: true,
+                            value: '',
+                        },
+                    ];
                 });
             },
             closeModal() {
@@ -236,6 +315,8 @@
         },
         data() {
             return {
+                funnelNewDTOListTemp: [],
+                tableHeadList: [],
                 showTags: 1,
                 taglists: [],
                 funnellists: [],
@@ -308,7 +389,7 @@
                         {
                             barWidth: 40,
                             barMinHeight: 10,
-    
+
                             barMaxWidth: 200,
                             name: '收入',
                             type: 'bar',
@@ -325,7 +406,17 @@
                                         if (this.option.series[0].data[params.dataIndex + 1] === 0.001) {
                                             return '无意义';
                                         }
-                                        return `${(((params.value === 0.001 ? 0 : params.value) / this.option.series[0].data[this.option.series[0].data.length - 1]) * 100).toFixed(0)}%`;
+                                        return `${(((
+                                            params.value === 0.001
+                                                ? 0
+                                                : params.value
+                                        ) / this.option.series[0].data[
+                                                this
+                                                    .option
+                                                    .series[0]
+                                                    .data
+                                                    .length - 1
+                                            ]) * 100).toFixed(0)}%`;
                                     },
                                 },
                             },
@@ -350,7 +441,11 @@
                                     color: '#333',
                                     show: true,
                                     position: 'left',
-                                    formatter: params => `${-(+params.value === -0.0001 ? 0 : params.value)}`,
+                                    formatter: params => `${-(
+                                        +params.value === -0.0001
+                                            ? 0
+                                            : params.value
+                                    )}`,
                                 },
                             },
                             data: [
@@ -369,12 +464,10 @@
         },
         mounted() {
             // document.getElementById('ajax-loader').style.display = 'block';
-            // document.getElementById('mask').style.display = 'block';
-    
-            // const baseURL =
+            // document.getElementById('mask').style.display = 'block'; const baseURL =
             // `${window.$$commonPath}/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
             // 获取漏斗标签列表
-            const baseURLTags = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
+            const baseURLTags = `${window.$$commonPath}/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
             axios
                 .get(baseURLTags, {
                     // baseURL: window.$$domain,
@@ -383,57 +476,6 @@
                     },
                 })
                 .then((respdata) => {
-                    respdata = {
-                        code: 0,
-                        data: [
-                            {
-                                key: 'VIEW_001',
-                                desc: 'A按钮曝光事件埋点',
-                                value: 0,
-                            }, {
-                                key: 'EC002',
-                                desc: 'B按钮点击事件埋点',
-                                value: 0,
-                            }, {
-                                key: 'resource',
-                                desc: '新增曝光数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'visitor',
-                                desc: '新增访客数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'join',
-                                desc: '新增参与人数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'finishtask',
-                                desc: '新增完成任务人数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'predrawprize',
-                                desc: '预领奖人数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'drawprize',
-                                desc: '新增领奖人数(UV)',
-                                value: 1,
-                            }, {
-                                key: 'drawcost',
-                                desc: '新增活动发放成本(UV)',
-                                value: 1,
-                            }, {
-                                key: 'usecost',
-                                desc: '新增实际使用成本(UV)',
-                                value: 1,
-                            }, {
-                                key: 'prizeuse',
-                                desc: '新增奖品使用人数(UV)',
-                                value: 1,
-                            },
-                        ],
-                        success: true,
-                    };
                     if (respdata.code === 0) {
                         const labelObj = {
                             0: {
@@ -446,21 +488,25 @@
                             },
                         };
                         const resd = respdata.data;
+
                         for (let i = 0; i < resd.length; i++) {
                             labelObj[resd[i].value]
                                 .options
-                                .push({ value: {
-                                    value: resd[i].value,
-                                    key: resd[i].key,
-                                },
-                                label: resd[i].desc });
+                                .push({
+                                    value: {
+                                        value: resd[i].value,
+                                        key: resd[i].key,
+                                    },
+                                    label: resd[i].desc,
+                                });
                         }
+
                         this.taglists = labelObj;
                     }
                 });
-    
+
             //  获取漏斗列表
-            const baseURLFunnelTypes = `http://192.168.21.226:8082/ops-activityeffect/api/v1/manager/effect/funnel/list?activityId=${window.$$_ActivityId}`;
+            const baseURLFunnelTypes = `${window.$$commonPath}/api/v1/manager/effect/funnel/list?activityId=${window.$$_ActivityId}`;
             axios
                 .get(baseURLFunnelTypes, {
                     // baseURL: window.$$domain,
@@ -715,5 +761,55 @@
             font-size: 18px;
             height: 400px;
         }
+    }
+     /*some basic design treatment for table.nices*/
+    table.nice {
+        margin: 0;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table.nice caption {
+        font-size: 2em;
+        line-height: 1.4em;
+        border-bottom: 2px solid #404040;
+        text-align: left;
+        background: #FFF;
+    }
+    table.nice th {
+        background: #F9F9F9;
+        font-weight: bold;
+        text-align: left;
+    }
+    table.nice td,
+    table.nice th {
+        padding: 10px;
+        vertical-align: top;
+        border: 1px solid #CCC;
+        border-collapse: collapse;
+    }
+    table.nice .main {
+        width: 100%;
+    }
+    table.nice .wrap {
+        white-space: normal;
+    }
+    table.nice .nr {
+        text-align: right;
+    }
+
+    table.nice thead th {
+        border-bottom: 2px solid #404040;
+        vertical-align: bottom;
+    }
+    table.nice tbody th {
+        width: 200px;
+    }
+
+    table.nice tfoot td {
+        border-top: 2px solid #000;
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        font-weight: bold;
     }
 </style>

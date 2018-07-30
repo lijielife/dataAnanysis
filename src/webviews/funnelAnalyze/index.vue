@@ -534,7 +534,22 @@
                         this.funnellists = respdata.data;
                     }
                 });
+            const pickertops = document.querySelectorAll('.ant-calendar-top');
+            const len = pickertops.length;
+    
+            pickertops[len - 1].addEventListener('click', (e) => {
+                if (e.target.nodeName === 'A') {
+                    setTimeout(() => {
+                        const temptime = document.querySelectorAll('.ant-calendar-range-picker')[len - 1].value;
+                        const temptimeArr = temptime.split(' ~ ');
+                        const newtimeArr = [`${temptimeArr[0]} 00:00:00`, `${temptimeArr[1]} 23:59:59`];
+                        document.querySelectorAll('.ant-calendar-picker-container')[len - 1].style.display = 'none';
+                        this.timeranger = [new Date(`${newtimeArr[0]}`).getTime(), new Date(`${newtimeArr[1]}`).getTime()];
+                    }, 300);
+                }
+            }, false);
         },
+
     };
 </script>
 <style lang="scss" scoped="scoped">

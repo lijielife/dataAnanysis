@@ -185,7 +185,6 @@
                 }).then((res) => {
                     a.close();
                     if (res.code === 0) {
-                        console.log(res);
                         const datal = [];
                         const datar = [];
                         const title = [];
@@ -257,7 +256,7 @@
             },
             saveModal() {
                 if (!this.funnelname) {
-                    Notification.success({
+                    Notification.error({
                         message: '消息提示', description: '请填写漏斗名称', duration: 4, // 显示时长  单位s
                     });
 
@@ -271,14 +270,30 @@
                     ],
                     name: this.funnelname,
                 };
+                const wanna2set = [];
                 for (let i = 0; i < this.steps.length; i++) {
                     if (this.steps[i].show) {
-                        body
-                            .items
-                            .push({
-                                ...JSON.parse(this.steps[i].value),
-                            });
+                        wanna2set
+                            .push(
+                                this.steps[i].value,
+                            );
                     }
+                }
+                const norepu = [...new Set(wanna2set)];
+                if (norepu.length !== wanna2set.length) {
+                    Notification.error({
+                        message: '消息提示', description: '请不要重复选择相同漏斗步骤', duration: 4, // 显示时长  单位s
+                    });
+                    return;
+                }
+                console.log('norepu', norepu);
+
+                for (let i = 0; i < norepu.length; i++) {
+                    body
+                        .items
+                        .push({
+                            ...JSON.parse(norepu[i]),
+                        });
                 }
 
                 // POST /ops-activityeffect/api/v1/manager/effect/funnel/add

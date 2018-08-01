@@ -1,5 +1,10 @@
 <template>
     <div style="position:relative;width:100%;overflow:hidden">
+        <div class="panel-body">
+            <div class="alert alert-info">
+                <nb-badge status="processing" text="汇总数据有1H延迟。"></nb-badge>
+            </div>
+        </div>
         <div style="display:flex;justify-content:flex-end;align-items:center">
             <nb-icon
                 @click="downreport"
@@ -110,21 +115,23 @@
                         {{v}}
                     </td>
                 </tr>
-                 <tr
+                <tr
                     class="assessDetail"
-                    v-if="tabledata.tasks.length"
-                    v-for="(v,k) in (taskrowspan * 2)">
-                    <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
+                    v-if="tabledata.resource.length"
+                    v-for="(v,k) in (resourcerowspan * 3)">
+                    <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
                         资源位转化
                     </td>
-                    <td rowspan="2" style="text-align:left;white-space: nowrap;" v-if="k % 2 === 0">
-                        {{tabledata.tasks[k / 2].key}}
-
+                    <td
+                        rowspan="3"
+                        style="text-align:center;white-space: nowrap;"
+                        v-if="k % 3 === 0">
+                        {{tabledata.resource[k / 3].key}}
                     </td>
-                    <td>{{ (k%2) === 0 ? '完成人数' : '完成次数'}}
+                    <td>{{ (k%3) === 0 ? '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}}
                     </td>
                     <td
-                        v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
+                        v-for="(v,k) in tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1 ?  'uv_resource_click' : 'rate')]">
                         {{v}}
                     </td>
                 </tr>
@@ -160,9 +167,11 @@
                 tabledata: {
                     datas: [],
                     tasks: [],
+                    resource: []
                 },
                 taskrowspan: 1,
-                showtable: false,
+                resourcerowspan: 1,
+                showtable: false
             };
         },
         methods: {
@@ -176,7 +185,7 @@
                         `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
                     );
                 }
-            },
+            }
         },
 
         async mounted() {
@@ -198,8 +207,8 @@
             const respdata = await axios.get(baseURL, {
                 // baseURL: window.$$domain,
                 headers: {
-                    Authorization: window.$$Authorization,
-                },
+                    Authorization: window.$$Authorization
+                }
             });
             document
                 .querySelector('#ajax-loader')
@@ -214,25 +223,160 @@
 
             if (respdata.code === 0) {
                 this.tabledata = respdata.data;
-                this.taskrowspan = this.tabledata.tasks.length;
+                try {
+                    this.taskrowspan = this.tabledata.tasks.length;
+                } catch (error) {
+                    //
+                }
+                try {
+                    this.resourcerowspan = this.tabledata.resource.length;
+                } catch (error) {
+                    //
+                }
+
                 this.$forceUpdate();
             }
-        },
+        }
     };
 </script>
 
 <style lang="scss" scoped="scoped">
-/**加载组件 */
-#ajax-loader{z-index:9999;display:none;position:fixed;margin:auto;left:0;right:0;top:40%;width:120px;height:10px;padding:68px 20px 55px 17px;border:1px solid #6FD3B3;border-radius:4px;background:rgba(255,255,255,.9)}@media (max-width:1050px){#ajax-loader{left:42px}}#ajax-loader p{font-size:13px;text-align:center;color:#2DCA93;line-height:40px}#ajax-loader ul{margin:0;list-style:none;width:90px;height:65px;position:relative;padding:0;height:10px;margin: 0 auto;}#ajax-loader ul li{position:absolute;width:4px;border-radius:2px;height:0;background-color:#2DCA93;bottom:0}@keyframes sequence1{0%{height:10px}50%{height:50px}100%{height:10px}}@keyframes sequence2{0%{height:20px}50%{height:65px}100%{height:20px}}#ajax-loader li:nth-child(1){left:2px;animation:sequence1 1s ease infinite .1s}#ajax-loader li:nth-child(2){animation-name:sequence2}#ajax-loader li:nth-child(2){left:17px;animation:sequence1 1s ease infinite .2s}#ajax-loader li:nth-child(4){animation-name:sequence2}#ajax-loader li:nth-child(3){left:32px;animation:sequence1 1s ease infinite .3s}#ajax-loader li:nth-child(6){animation-name:sequence2}#ajax-loader li:nth-child(4){left:47px;animation:sequence1 1s ease infinite .4s}#ajax-loader li:nth-child(8){animation-name:sequence2}#ajax-loader li:nth-child(5){left:62px;animation:sequence1 1s ease infinite .5s}#ajax-loader li:nth-child(10){animation-name:sequence2}#ajax-loader li:nth-child(6){left:77px;animation:sequence1 1s ease infinite .6s}#ajax-loader li:nth-child(12){animation-name:sequence2}
-#mask{
-    display: none;
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    background-color:rgba(144,144,144,.6);
-}
+    .panel-body {
+        margin-top: 1px;
+        background: #fff;
+        border: 1px solid #e7eaec;
+        border-radius: 2px;
+        position: relative;
+    }
+    .alert-info {
+        color: #31708f;
+        background-color: #f5f8fb;
+        border: 0;
+        margin-bottom: 0;
+    }
+    .alert {
+        padding: 15px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    /**加载组件 */
+    #ajax-loader {
+        z-index: 9999;
+        display: none;
+        position: fixed;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 40%;
+        width: 120px;
+        height: 10px;
+        padding: 68px 20px 55px 17px;
+        border: 1px solid #6FD3B3;
+        border-radius: 4px;
+        background: rgba(255,255,255,.9);
+    }
+    @media (max-width:1050px) {
+        #ajax-loader {
+            left: 42px;
+        }
+    }
+    #ajax-loader p {
+        font-size: 13px;
+        text-align: center;
+        color: #2DCA93;
+        line-height: 40px;
+    }
+    #ajax-loader ul {
+        margin: 0;
+        list-style: none;
+        width: 90px;
+        height: 65px;
+        position: relative;
+        padding: 0;
+        height: 10px;
+        margin: 0 auto;
+    }
+    #ajax-loader ul li {
+        position: absolute;
+        width: 4px;
+        border-radius: 2px;
+        height: 0;
+        background-color: #2DCA93;
+        bottom: 0;
+    }
+    @keyframes sequence1 {
+        0% {
+            height: 10px;
+        }
+        50% {
+            height: 50px;
+        }
+        100% {
+            height: 10px;
+        }
+    }
+    @keyframes sequence2 {
+        0% {
+            height: 20px;
+        }
+        50% {
+            height: 65px;
+        }
+        100% {
+            height: 20px;
+        }
+    }
+    #ajax-loader li:nth-child(1) {
+        left: 2px;
+        animation: sequence1 1s ease infinite 0.1s;
+    }
+    #ajax-loader li:nth-child(2) {
+        animation-name: sequence2;
+    }
+    #ajax-loader li:nth-child(2) {
+        left: 17px;
+        animation: sequence1 1s ease infinite 0.2s;
+    }
+    #ajax-loader li:nth-child(4) {
+        animation-name: sequence2;
+    }
+    #ajax-loader li:nth-child(3) {
+        left: 32px;
+        animation: sequence1 1s ease infinite 0.3s;
+    }
+    #ajax-loader li:nth-child(6) {
+        animation-name: sequence2;
+    }
+    #ajax-loader li:nth-child(4) {
+        left: 47px;
+        animation: sequence1 1s ease infinite 0.4s;
+    }
+    #ajax-loader li:nth-child(8) {
+        animation-name: sequence2;
+    }
+    #ajax-loader li:nth-child(5) {
+        left: 62px;
+        animation: sequence1 1s ease infinite 0.5s;
+    }
+    #ajax-loader li:nth-child(10) {
+        animation-name: sequence2;
+    }
+    #ajax-loader li:nth-child(6) {
+        left: 77px;
+        animation: sequence1 1s ease infinite 0.6s;
+    }
+    #ajax-loader li:nth-child(12) {
+        animation-name: sequence2;
+    }
+    #mask {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(144,144,144,.6);
+    }
 
     .ant-table-scroll-tip-horizontal {
         top: 0;

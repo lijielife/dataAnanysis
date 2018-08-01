@@ -23,6 +23,12 @@ const sideMenuData = [
                 res_type: 'view',
             },
             {
+                describe: '资源位投放',
+                icon: 'appstore-o',
+                uri: '/cg-data-overview',
+                res_type: 'view',
+            },
+            {
                 describe: '服务端埋点数据',
                 icon: 'appstore-o',
                 uri: '/be-data-overview',

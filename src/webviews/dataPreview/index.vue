@@ -250,8 +250,9 @@
                     quota = 'benefit';
                 } else if (/fe-data-overview/.test(location.hash)) {
                     quota = 'trackSource';
+                } else if (/cg-data-overview/.test(location.hash)) {
+                    quota = 'front';
                 }
-
                 axios
                     .get(
                         `${window.$$commonPath}/api/v1/manager/effect/user/showpanel/curve?activityId=${window.$$_ActivityId}&quota=${quota}`,

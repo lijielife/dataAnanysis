@@ -497,11 +497,11 @@
                 .then((respdata) => {
                     if (respdata.code === 0) {
                         const labelObj = {
-                            0: {
+                            1: {
                                 label: '源数据',
                                 options: [],
                             },
-                            1: {
+                            0: {
                                 label: '聚合类数据',
                                 options: [],
                             },

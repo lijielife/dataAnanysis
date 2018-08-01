@@ -110,6 +110,24 @@
                         {{v}}
                     </td>
                 </tr>
+                 <tr
+                    class="assessDetail"
+                    v-if="tabledata.tasks.length"
+                    v-for="(v,k) in (taskrowspan * 2)">
+                    <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
+                        资源位转化
+                    </td>
+                    <td rowspan="2" style="text-align:left;white-space: nowrap;" v-if="k % 2 === 0">
+                        {{tabledata.tasks[k / 2].key}}
+
+                    </td>
+                    <td>{{ (k%2) === 0 ? '完成人数' : '完成次数'}}
+                    </td>
+                    <td
+                        v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
+                        {{v}}
+                    </td>
+                </tr>
 
             </table>
         </div>

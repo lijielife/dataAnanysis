@@ -204,13 +204,13 @@
     
                         // 对0的特殊处理  0 === 0.0001
                         for (let i = 0; i < funnelNewDTOList.length; i++) {
-                            title.push((funnelNewDTOList[i].name));
-                            datal.push((
+                            title.unshift((funnelNewDTOList[i].name));
+                            datal.unshift((
                                 funnelNewDTOList[i].value === 0
                                     ? 0.0001
                                     : funnelNewDTOList[i].value
                             ));
-                            datar.push(-(
+                            datar.unshift(-(
                                 funnelNewDTOList[i].value === 0
                                     ? 0.0001
                                     : funnelNewDTOList[i].value
@@ -286,8 +286,6 @@
                     });
                     return;
                 }
-                console.log('norepu', norepu);
-
                 for (let i = 0; i < norepu.length; i++) {
                     body
                         .items
@@ -415,14 +413,20 @@
                                     color: '#333',
                                     position: 'right',
                                     formatter: (params) => {
+                                        console.log(params);
+                                        console.log(this.option.series[0].data);
                                         if (params.dataIndex === this.option.series[0].data.length - 1) {
                                             return '100%';
                                         }
-                                        if (this.option.series[0].data[params.dataIndex + 1] === 0.001) {
+                                        if (this.option.series[0].data[this.option.series[0].data.length - 1] == 0.001 && this.option.series[0].data[params.dataIndex] != 0.001) {
                                             return '无意义';
                                         }
+
+                                        if (this.option.series[0].data[this.option.series[0].data.length - 1] == 0.001 && this.option.series[0].data[params.dataIndex] == 0.001) {
+                                            return '0%';
+                                        }
                                         return `${(((
-                                            params.value === 0.001
+                                            params.value == 0.0001
                                                 ? 0
                                                 : params.value
                                         ) / this.option.series[0].data[

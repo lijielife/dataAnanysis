@@ -47,14 +47,14 @@
 </template>
 
 <script>
-    import { Breadcrumb, BreadcrumbItem, modal } from '@u51/miox-vant';
+    import {Breadcrumb, BreadcrumbItem, modal} from '@u51/miox-vant';
 
-    import { formatDateTime } from '../../../utils/helpers';
+    import {formatDateTime} from '../../../utils/helpers';
 
     export default {
         components: {
             'nb-breadcrumb': Breadcrumb,
-            'nb-breadcrumb-item': BreadcrumbItem,
+            'nb-breadcrumb-item': BreadcrumbItem
         },
         data() {
             return {
@@ -65,14 +65,31 @@
                 asyncTable: [],
                 name: '',
                 columns: [],
-                modalWidth: 780,
+                modalWidth: 780
             };
+        },
+        watch: {
+            showChangeActivityModel() {
+            
+                try {
+                    var ths = document
+                        .querySelector('.ant-table-thead')
+                        .getElementsByTagName("th") || [];
+
+                    for (let i = 0; i < ths.length; i++) {
+                        ths[i].style.width = "200px"
+                    }
+
+                } catch (error) {}
+
+            }
+
         },
 
         props: {
             breadPath: { // 面包屑路径数据
-                default: [],
-            },
+                default: []
+            }
         },
         created() {
             this.initial();
@@ -112,13 +129,14 @@
                     .get(baseURL, {
                         // baseURL: window.$$domain,
                         headers: {
-                            Authorization: window.$$Authorization,
+                            Authorization: window.$$Authorization
                         },
                         params: {
-                            name,
-                        },
+                            name
+                        }
                     })
                     .then((res) => {
+
                         this.loading4showChangeActivityModel = false;
                         if (res.code === 0) {
                             this.columns = res.data.heads;
@@ -135,12 +153,14 @@
                                 tabledatas.push(item);
                             }
                             this.asyncTable = tabledatas;
+
                         }
                     })
                     .catch(() => {
-                        modal.warning(
-                            { title: '接口暂时不可用，请反馈给开发', content: '<p>前端交互开发:管宇星、胡恩超</p><p>服务端开发：张万华、程云、徐亚军、邓家乐、高翔、郑召玺、娄玉龙</p>' },
-                        );
+                        modal.warning({
+                            title: '接口暂时不可用，请反馈给开发',
+                            content: '<p>前端交互开发:管宇星、胡恩超</p><p>服务端开发：张万华、程云、徐亚军、邓家乐、高翔、郑召玺、娄玉龙</p>'
+                        },);
                     });
             },
             open4showChangeActivityModel() {
@@ -162,8 +182,8 @@
                     .get(headInfoURL, {
                         // baseURL: window.$$domain,
                         headers: {
-                            Authorization: window.$$Authorization,
-                        },
+                            Authorization: window.$$Authorization
+                        }
                     })
                     .then((resp) => {
                         if (resp.code === 0) {
@@ -177,8 +197,8 @@
                 if (item.type === 'view') {
                     this.$push(item.uri);
                 }
-            },
-        },
+            }
+        }
     };
 </script>
 <style src="./index.scss" lang="sass" scoped="scoped"></style>

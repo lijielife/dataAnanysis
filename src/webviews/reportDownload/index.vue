@@ -11,7 +11,8 @@
                 type="cloud-download"
                 style="cursor:pointer;color:#00BBFF;width:40px;height:30px;font-size:28px;margin-right:30px"></nb-icon>
         </div>
-        <div style="width:100%;overflow-x:auto;position:relative" v-show="showtable">
+         <div style="position:relative;width:100%;overflow:hidden;margin-bottom:60px">
+  <div style="width:100%;overflow-x:auto;position:relative" v-show="showtable">
             <table class="mytable">
                 <tr>
                     <th></th>
@@ -143,6 +144,10 @@
                 <i class="anticon anticon-right  "></i>
             </div>
         </div>
+
+         </div>
+        
+      
         <!-- 加载loading模块 -->
         <div id="ajax-loader" style="display: none;">
             <ul>

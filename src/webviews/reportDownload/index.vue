@@ -115,7 +115,7 @@
                         {{v}}
                     </td>
                 </tr>
-                <tr
+                <!-- <tr
                     class="assessDetail"
                     v-if="tabledata.resource.length"
                     v-for="(v,k) in (resourcerowspan * 3)">
@@ -134,7 +134,7 @@
                         v-for="(v,k) in tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1 ?  'uv_resource_click' : 'rate')]">
                         {{v}}
                     </td>
-                </tr>
+                </tr> -->
 
             </table>
         </div>

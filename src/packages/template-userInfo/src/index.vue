@@ -4,6 +4,12 @@
             <ul>
                 <li>
                     <a
+                       @click="go2old">
+                        <nb-icon type="swap"></nb-icon>&nbsp;返回旧版
+                    </a>
+                </li>
+                <li>
+                    <a
                         href="http://wiki.51.nb/pages/viewpage.action?pageId=59457702"
                         target="_blank">
                         <nb-icon type="question-circle-o"></nb-icon>&nbsp;帮助文档
@@ -58,8 +64,13 @@
             }
         },
         methods: {
+            go2old(){
+                window.open(`http://opsplate.u51-inc.com/index.html?activityId=${window.$$_ActivityId}`);
+            },
             questionModal() {
-                modal.warning({title: '留言板块暂时关闭,反馈、疑问、交流等请直接联系:', content: '<p>前端交互开发:管宇星、胡恩超</p><p>服务端开发：张万华、程云、徐亚军、邓家乐、高翔、郑召玺、娄玉龙</p>'});
+                modal.warning(
+                    {title: '留言板块暂时关闭,反馈、疑问、交流等请直接联系:', content: '<p>前端交互开发:管宇星、胡恩超</p><p>服务端开发：张万华、程云、徐亚军、邓家乐、高翔、郑召玺、娄玉龙</p>'}
+                );
             },
             // 下拉框点击事件
             _dropdownClick: (type) => {

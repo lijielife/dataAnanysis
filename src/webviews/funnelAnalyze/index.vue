@@ -20,14 +20,18 @@
             <div class="row" style="min-width: 1000px;">
                 <div class="toolsbar">
                     <div class="toolsbar-left">
-                        <label>
-                            显示漏斗:</label>
+                        漏斗类型:
                         <nb-select
                             v-model="select"
-                            style="margin-left:10px;margin-right:10px;min-width:100px"
-                            @change="selectFunnel">
-                            <nb-option :value="index" v-for="(item,index) in funnelTypes" :key="index">{{item}}
-                            </nb-option>
+                            @change="createFunnel"
+                            filterable="filterable"
+                            placeholder="请选择漏斗类型">
+                            <nb-option
+                                v-for="item in funnellists"
+                                :key="item.autoId"
+                                :label="item.name"
+                                :value="item.autoId"></nb-option>
+
                         </nb-select>
                         <nb-button
                             icon="plus"
@@ -51,10 +55,29 @@
         </section>
         <section class="funnel-charts">
             <div class="funnel-chart">
-                <div class="title">转化流程</div>
+                <div class="title" v-show="select && timeranger.length ">转化流程</div>
                 <div class="bgw" id="testid" style="width:600px;height:600px"></div>
             </div>
         </section>
+
+        <table class="nice" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th v-for="(v,k) in tableHeadList" :key="k">
+                        {{v.value}}
+                    </th>
+                    <!-- <th> 参与人数 </th> <th> 参与次数 </th> <th> 任务完成人数 </th> <th> 任务完成次数 </th> <th>
+                    任务完成率(按人数) </th> <th> 任务完成率(按次数) </th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(v,k) in funnelNewDTOListTemp" :key="k">
+                    <td v-for="(vv,kk) in v" :key="kk">
+                       {{vv}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <nb-modal
             class="createFunnel"
@@ -74,14 +97,26 @@
                     label="漏斗步骤"
                     prop="text">
                     <div class="item" v-for="(v,k) in steps" :key="k" v-if="v.show">
-                        <nb-select style="margin-right:10px;width:200px" v-model="v.value">
-                            <nb-option
-                                :value="index"
-                                v-for="(item,index) in selectOption.option"
-                                :key="index">{{item}}
-                            </nb-option>
+                        <nb-select
+                            v-model="v.value"
+                            style="margin-left:2px;margin-right:10px;width:200px">
+                            <nb-option-group
+                                v-for="group in taglists"
+                                :key="group.label"
+                                :label="group.label">
+                                <nb-option
+                                    v-for="item in group.options"
+                                    :key="item.value.key"
+                                    :label="item.label"
+                                    :value="JSON.stringify(item.value)"></nb-option>
+                            </nb-option-group>
                         </nb-select>
-                        <nb-button icon="minus" @click="delectStep(k)" shape="circle" style="color:"></nb-button>
+                        <nb-button
+                            icon="minus"
+                            v-show="showTags>1"
+                            @click="delectStep(k)"
+                            shape="circle"
+                            style="color:"></nb-button>
                     </div>
 
                 </nb-form-item>
@@ -97,12 +132,108 @@
 </template>
 <script>
     import 'echarts/theme/shine';
+    import { mapActions, mapGetters } from 'vuex';
+    import { modal, message, Notification } from '@u51/miox-vant';
+    import { formatDateTime } from '../../utils/helpers';
 
+    import store from '../../webstore/index';
 
     require('echarts/lib/chart/bar');
 
     export default {
+        computed: {
+            ...mapGetters({ userInfo: 'getUserInfo' }),
+        },
+        watch: {
+            timeranger() {
+                if (this.select) {
+                    this.createFunnel(this.select);
+                }
+            },
+
+            steps() {
+                console.log(this.steps);
+            },
+        },
+        store,
         methods: {
+            paintTable() {},
+            paintFunnel() {
+                echarts
+                    .init(document.getElementById('testid'))
+                    .setOption(this.option);
+            },
+            createFunnel(c) {
+                if (!this.timeranger.length) {
+                    message.warning('请选择时间范围');
+                    return;
+                }
+                const quota = 'uv';
+                const funnelId = c;
+                const start = formatDateTime(this.timeranger[0], 6);
+                const end = formatDateTime(this.timeranger[1], 6);
+                const activityId = window.$$_ActivityId;
+
+                // GET /ops-activityeffect/api/v1/manager/effect/funnel/paint
+                const url = `${window.$$commonPath}/api/v1/manager/effect/funnel/getFunnelDetail?quota=${quota}&funnelId=${funnelId}&start=${start}&end=${end}&activityId=${activityId}`;
+                const a = modal.spin();
+                axios({
+                    url,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                }).then((res) => {
+                    a.close();
+                    if (res.code === 0) {
+                        const datal = [];
+                        const datar = [];
+                        const title = [];
+                        const funnelNewDTOList = res.data.funnelNewDTOList || [];
+                        const funnelCustomTableDTOList = res.data.tableDataList || [];
+                        this.tableHeadList = res.data.tableHeadList || [];
+                        const funnelNewDTOListTemp = [];
+                        for (let j = 0; j < funnelCustomTableDTOList.length; j++) {
+                            const temp = [];
+                            for (let i = 0; i < this.tableHeadList.length; i++) {
+                                const val = funnelCustomTableDTOList[j][this.tableHeadList[i].key];
+                                temp.push(val);
+                            }
+                            funnelNewDTOListTemp.push(temp);
+                        }
+                        this.funnelNewDTOListTemp = funnelNewDTOListTemp;
+    
+                        // 对0的特殊处理  0 === 0.0001
+                        for (let i = 0; i < funnelNewDTOList.length; i++) {
+                            title.unshift((funnelNewDTOList[i].name));
+                            datal.unshift((
+                                funnelNewDTOList[i].value === 0
+                                    ? 0.0001
+                                    : funnelNewDTOList[i].value
+                            ));
+                            datar.unshift(-(
+                                funnelNewDTOList[i].value === 0
+                                    ? 0.0001
+                                    : funnelNewDTOList[i].value
+                            ));
+                        }
+                        this
+                            .option
+                            .series[0]
+                            .data = datal;
+                        this
+                            .option
+                            .series[1]
+                            .data = datar;
+                        this
+                            .option
+                            .yAxis[0]
+                            .data = title;
+                        this.paintFunnel();
+                        this.paintTable();
+                    }
+                });
+            },
+            ...mapActions(['getUserInfo', 'getMenus']),
             selectFunnel() {},
             refresh() {},
             showCreatFunnelModel() {
@@ -113,19 +244,83 @@
                     show: false,
                     value: 0,
                 };
+                this.showTags--;
                 this.$forceUpdate();
             },
             addStep() {
                 this
                     .steps
-                    .push({ show: true, value: 0 });
+                    .push({ show: true, value: '' });
+
+                this.showTags++;
             },
             saveModal() {
+                if (!this.funnelname) {
+                    Notification.error({
+                        message: '消息提示', description: '请填写漏斗名称', duration: 4, // 显示时长  单位s
+                    });
+
+                    return;
+                }
+                const body = {
+                    activityId: window.$$_ActivityId,
+                    createUser: this.userInfo.account,
+                    items: [
+                        // {     desc: 'string',     key: 'string',     value: {}, },
+                    ],
+                    name: this.funnelname,
+                };
+                const wanna2set = [];
                 for (let i = 0; i < this.steps.length; i++) {
                     if (this.steps[i].show) {
-                        console.log(this.steps[i].value);
+                        wanna2set
+                            .push(
+                                this.steps[i].value,
+                            );
                     }
                 }
+                const norepu = [...new Set(wanna2set)];
+                if (norepu.length !== wanna2set.length) {
+                    Notification.error({
+                        message: '消息提示', description: '请不要重复选择相同漏斗步骤', duration: 4, // 显示时长  单位s
+                    });
+                    return;
+                }
+                for (let i = 0; i < norepu.length; i++) {
+                    body
+                        .items
+                        .push({
+                            ...JSON.parse(norepu[i]),
+                        });
+                }
+
+                // POST /ops-activityeffect/api/v1/manager/effect/funnel/add
+                const a = modal.spin();
+                axios({
+                    method: 'post',
+                    data: body,
+                    url: `${window.$$commonPath}/api/v1/manager/effect/funnel/add`,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                }).then((res) => {
+                    a.close();
+                    Notification.success({
+                        message: '消息提示', description: '漏斗类型保存成功', duration: 4, // 显示时长  单位s
+                    });
+
+                    this
+                        .funnellists
+                        .push({ autoId: res.data, name: body.name });
+                    this.creatFunnel = false;
+                    this.funnelname = '';
+                    this.steps = [
+                        {
+                            show: true,
+                            value: '',
+                        },
+                    ];
+                });
             },
             closeModal() {
                 this.creatFunnel = false;
@@ -133,14 +328,19 @@
         },
         data() {
             return {
+                funnelNewDTOListTemp: [],
+                tableHeadList: [],
+                showTags: 1,
+                taglists: [],
+                funnellists: [],
                 steps: [
                     {
                         show: true,
-                        value: 0,
+                        value: '',
                     },
                 ],
                 selectOption: {
-                    option: ['广发银行', '温州银行'],
+                    option: [],
                 },
 
                 funnelname: '',
@@ -202,6 +402,7 @@
                         {
                             barWidth: 40,
                             barMinHeight: 10,
+
                             barMaxWidth: 200,
                             name: '收入',
                             type: 'bar',
@@ -211,7 +412,31 @@
                                     show: true,
                                     color: '#333',
                                     position: 'right',
-                                    formatter: params => `${params.value}%`,
+                                    formatter: (params) => {
+                                        console.log(params);
+                                        console.log(this.option.series[0].data);
+                                        if (params.dataIndex === this.option.series[0].data.length - 1) {
+                                            return '100%';
+                                        }
+                                        if (this.option.series[0].data[this.option.series[0].data.length - 1] == 0.001 && this.option.series[0].data[params.dataIndex] != 0.001) {
+                                            return '无意义';
+                                        }
+
+                                        if (this.option.series[0].data[this.option.series[0].data.length - 1] == 0.001 && this.option.series[0].data[params.dataIndex] == 0.001) {
+                                            return '0%';
+                                        }
+                                        return `${(((
+                                            params.value == 0.0001
+                                                ? 0
+                                                : params.value
+                                        ) / this.option.series[0].data[
+                                                this
+                                                    .option
+                                                    .series[0]
+                                                    .data
+                                                    .length - 1
+                                            ]) * 100).toFixed(0)}%`;
+                                    },
                                 },
                             },
                             data: [
@@ -235,7 +460,11 @@
                                     color: '#333',
                                     show: true,
                                     position: 'left',
-                                    formatter: params => `${-(+params.value)}`,
+                                    formatter: params => `${-(
+                                        +params.value === -0.0001
+                                            ? 0
+                                            : params.value
+                                    )}`,
                                 },
                             },
                             data: [
@@ -252,29 +481,79 @@
                 },
             };
         },
-        async mounted() {
+        mounted() {
             // document.getElementById('ajax-loader').style.display = 'block';
-            // document.getElementById('mask').style.display = 'block';
-            echarts
-                .init(document.getElementById('testid'))
-                .setOption(this.option);
+            // document.getElementById('mask').style.display = 'block'; const baseURL =
+            // `${window.$$commonPath}/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
+            // 获取漏斗标签列表
+            const baseURLTags = `${window.$$commonPath}/api/v1/manager/effect/funnel/itemKey/list?activityId=${window.$$_ActivityId}`;
+            axios
+                .get(baseURLTags, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                })
+                .then((respdata) => {
+                    if (respdata.code === 0) {
+                        const labelObj = {
+                            1: {
+                                label: '源数据',
+                                options: [],
+                            },
+                            0: {
+                                label: '聚合类数据',
+                                options: [],
+                            },
+                        };
+                        const resd = respdata.data;
 
-            const baseURL = `${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
+                        for (let i = 0; i < resd.length; i++) {
+                            labelObj[resd[i].value]
+                                .options
+                                .push({
+                                    value: {
+                                        value: resd[i].value,
+                                        key: resd[i].key,
+                                    },
+                                    label: resd[i].desc,
+                                });
+                        }
 
-            const respdata = await axios.get(baseURL, {
-                // baseURL: window.$$domain,
-                headers: {
-                    Authorization: window.$$Authorization,
-                },
-            });
+                        this.taglists = labelObj;
+                    }
+                });
 
-            if (respdata.code === 0) {
-                this.tabledata = respdata.data;
-                this.taskrowspan = this.tabledata.tasks.length;
-                console.log('this.taskrowspan ', this.taskrowspan);
-                this.$forceUpdate();
-            }
+            //  获取漏斗列表
+            const baseURLFunnelTypes = `${window.$$commonPath}/api/v1/manager/effect/funnel/list?activityId=${window.$$_ActivityId}`;
+            axios
+                .get(baseURLFunnelTypes, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization,
+                    },
+                })
+                .then((respdata) => {
+                    if (respdata.code === 0) {
+                        this.funnellists = respdata.data;
+                    }
+                });
+            const pickertops = document.querySelectorAll('.ant-calendar-top');
+            const len = pickertops.length;
+    
+            pickertops[len - 1].addEventListener('click', (e) => {
+                if (e.target.nodeName === 'A') {
+                    setTimeout(() => {
+                        const temptime = document.querySelectorAll('.ant-calendar-range-picker')[len - 1].value;
+                        const temptimeArr = temptime.split(' ~ ');
+                        const newtimeArr = [`${temptimeArr[0]} 00:00:00`, `${temptimeArr[1]} 23:59:59`];
+                        document.querySelectorAll('.ant-calendar-picker-container')[len - 1].style.display = 'none';
+                        this.timeranger = [new Date(`${newtimeArr[0]}`).getTime(), new Date(`${newtimeArr[1]}`).getTime()];
+                    }, 300);
+                }
+            }, false);
         },
+
     };
 </script>
 <style lang="scss" scoped="scoped">
@@ -500,7 +779,6 @@
     .funnel-charts {
         display: flex;
         width: 100%;
-        overflow: auto;
         height: 600px;
         justify-content: center;
         padding: 10px;
@@ -517,5 +795,55 @@
             font-size: 18px;
             height: 400px;
         }
+    }
+     /*some basic design treatment for table.nices*/
+    table.nice {
+        margin: 0;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table.nice caption {
+        font-size: 2em;
+        line-height: 1.4em;
+        border-bottom: 2px solid #404040;
+        text-align: left;
+        background: #FFF;
+    }
+    table.nice th {
+        background: #F9F9F9;
+        font-weight: bold;
+        text-align: left;
+    }
+    table.nice td,
+    table.nice th {
+        padding: 10px;
+        vertical-align: top;
+        border: 1px solid #CCC;
+        border-collapse: collapse;
+    }
+    table.nice .main {
+        width: 100%;
+    }
+    table.nice .wrap {
+        white-space: normal;
+    }
+    table.nice .nr {
+        text-align: right;
+    }
+
+    table.nice thead th {
+        border-bottom: 2px solid #404040;
+        vertical-align: bottom;
+    }
+    table.nice tbody th {
+        width: 200px;
+    }
+
+    table.nice tfoot td {
+        border-top: 2px solid #000;
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        font-weight: bold;
     }
 </style>

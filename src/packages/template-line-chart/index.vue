@@ -155,8 +155,8 @@
                 return eval(val);
             },
             getOverview() {
-                // const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}`;
-                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
+                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}`;
+                // const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
                 axios
                     .get(baseURL, {
                         // baseURL: window.$$domain,
@@ -239,7 +239,7 @@
                 } else {
                     baseURL += `${startAndend}`;
                 }
-                //  baseURL += `&sourceItem=${this.mianTitleAndId.sourceItem}`;
+                baseURL += `&sourceItem=${this.mianTitleAndId.sourceItem}`;
                 const respdata = await axios.get(baseURL, {
                     // baseURL: window.$$domain,
                     headers: {

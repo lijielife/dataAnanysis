@@ -225,21 +225,21 @@
                 }
             },
             async createDefaultRrangeOfTime() {
-                // const res = await axios.get(`${window.$$commonPath}/api/v1/manager/effect/activity/getQueryDate?activityId=${window.$$_ActivityId}`,
-                //     {
-                //         // baseURL: window.$$domain,
-                //         headers: {
-                //             Authorization: window.$$Authorization,
-                //         },
-                //     });
+                const res = await axios.get(`${window.$$commonPath}/api/v1/manager/effect/activity/getQueryDate?activityId=${window.$$_ActivityId}`,
+                    {
+                        // baseURL: window.$$domain,
+                        headers: {
+                            Authorization: window.$$Authorization,
+                        },
+                    });
 
-                // if (res.code === 0) {
-                //     this.timeranger = [res.data.start, res.data.end];
-                // }
-                const now = Date.now();
-                const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+                if (res.code === 0) {
+                    this.timeranger = [res.data.start, res.data.end];
+                }
+                // const now = Date.now();
+                // const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
 
-                this.timeranger = [sevenDaysAgo, now];
+                // this.timeranger = [sevenDaysAgo, now];
             },
 
             whichLineChartNeedsShow() {
@@ -248,8 +248,11 @@
                     quota = 'basic';
                 } else if (/benefit-analysis/.test(location.hash)) {
                     quota = 'benefit';
+                } else if (/fe-data-overview/.test(location.hash)) {
+                    quota = 'trackSource';
+                } else if (/cg-data-overview/.test(location.hash)) {
+                    quota = 'front';
                 }
-
                 axios
                     .get(
                         `${window.$$commonPath}/api/v1/manager/effect/user/showpanel/curve?activityId=${window.$$_ActivityId}&quota=${quota}`,
@@ -319,13 +322,16 @@
         },
     
         mounted() {
-            document.querySelector('.ant-calendar-top').addEventListener('click', (e) => {
+            const pickertops = document.querySelectorAll('.ant-calendar-top');
+            const len = pickertops.length;
+    
+            pickertops[len - 1].addEventListener('click', (e) => {
                 if (e.target.nodeName === 'A') {
                     setTimeout(() => {
-                        const temptime = document.querySelector('.ant-calendar-range-picker').value;
+                        const temptime = document.querySelectorAll('.ant-calendar-range-picker')[len - 1].value;
                         const temptimeArr = temptime.split(' ~ ');
                         const newtimeArr = [`${temptimeArr[0]} 00:00:00`, `${temptimeArr[1]} 23:59:59`];
-                        document.querySelector('.ant-calendar-picker-container').style.display = 'none';
+                        document.querySelectorAll('.ant-calendar-picker-container')[len - 1].style.display = 'none';
                         this.copytimeranger = [new Date(`${newtimeArr[0]}`).getTime(), new Date(`${newtimeArr[1]}`).getTime()];
                     }, 300);
                 }

@@ -12,8 +12,6 @@ import {
     Notification,
     Pagination,
     Checkbox,
-    Select,
-    Option,
     Modal,
     Row,
     Col,
@@ -47,6 +45,9 @@ import {
     Menu,
     icon,
 } from '@u51/miox-vant';
+
+import { Select, Option, OptionGroup } from 'element-ui';
+
 // import './utils/filter.js';  过滤器
 import axios from './axios';
 
@@ -67,6 +68,7 @@ vue.component('nb-pagination', Pagination);
 vue.component('nb-checkbox', Checkbox);
 vue.component('nb-checkbox-group', CheckboxGroup);
 vue.component('nb-select', Select);
+vue.component('nb-option-group', OptionGroup);
 vue.component('nb-option', Option);
 vue.component('nb-modal', Modal);
 vue.component('nb-row', Row);

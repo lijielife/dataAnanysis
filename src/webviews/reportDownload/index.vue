@@ -11,143 +11,154 @@
                 type="cloud-download"
                 style="cursor:pointer;color:#00BBFF;width:40px;height:30px;font-size:28px;margin-right:30px"></nb-icon>
         </div>
-         <div style="position:relative;width:100%;overflow:hidden;margin-bottom:60px">
-  <div style="width:100%;overflow-x:auto;position:relative" v-show="showtable">
-            <table class="mytable">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th style="width:160px;">
-                        <div class="out">
-                            <b>指标</b>
-                            <em>日期</em>
-                        </div>
-                    </th>
-                    <th v-for="(v,k) in tabledata.colHeads">
-                        {{ (v.value) }}
-                    </th>
-                </tr>
-                <tr class="assessDetail">
-                    <td rowspan="10">
-                        活动基础数据
-                    </td>
-                    <td rowspan="4">
-                        UV
-                    </td>
-                    <td>访客人数</td>
-                    <td v-for="(v,k) in tabledata.datas[0]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>参与人数</td>
-                    <td v-for="(v,k) in tabledata.datas[1]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
+        <div style="position:relative;width:100%;overflow:hidden;margin-bottom:60px">
+            <div style="width:100%;overflow-x:auto;position:relative" v-show="showtable">
+                <table class="mytable">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th style="width:160px;">
+                            <div class="out">
+                                <b>指标</b>
+                                <em>日期</em>
+                            </div>
+                        </th>
+                        <th v-for="(v,k) in tabledata.colHeads">
+                            {{ (v.value) }}
+                        </th>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td rowspan="10">
+                            活动基础数据
+                        </td>
+                        <td rowspan="4">
+                            UV
+                        </td>
+                        <td>访客人数</td>
+                        <td v-for="(v,k) in tabledata.datas[0]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>参与人数</td>
+                        <td v-for="(v,k) in tabledata.datas[1]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
 
-                    <td>领取奖品人数</td>
-                    <td v-for="(v,k) in tabledata.datas[2]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
+                        <td>领取奖品人数</td>
+                        <td v-for="(v,k) in tabledata.datas[2]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
 
-                    <td>奖品奖品人数</td>
-                    <td v-for="(v,k) in tabledata.datas[3]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td rowspan="6">
-                        PV
-                    </td>
-                    <td>访客次数</td>
-                    <td v-for="(v,k) in tabledata.datas[4]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>参与次数</td>
-                    <td v-for="(v,k) in tabledata.datas[5]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>领取奖品次数</td>
-                    <td v-for="(v,k) in tabledata.datas[6]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>奖品使用次数</td>
-                    <td v-for="(v,k) in tabledata.datas[7]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>活动发放成本</td>
-                    <td v-for="(v,k) in tabledata.datas[8]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr class="assessDetail">
-                    <td>实际使用成本</td>
-                    <td v-for="(v,k) in tabledata.datas[9]">
-                        {{v}}
-                    </td>
-                </tr>
-                <tr
-                    class="assessDetail"
-                    v-if="tabledata.tasks.length"
-                    v-for="(v,k) in (taskrowspan * 2)">
-                    <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
-                        任务完成
-                    </td>
-                    <td rowspan="2" style="text-align:left;white-space: nowrap;" v-if="k % 2 === 0">
-                        {{tabledata.tasks[k / 2].key}}
+                        <td>奖品奖品人数</td>
+                        <td v-for="(v,k) in tabledata.datas[3]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td rowspan="6">
+                            PV
+                        </td>
+                        <td>访客次数</td>
+                        <td v-for="(v,k) in tabledata.datas[4]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>参与次数</td>
+                        <td v-for="(v,k) in tabledata.datas[5]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>领取奖品次数</td>
+                        <td v-for="(v,k) in tabledata.datas[6]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>奖品使用次数</td>
+                        <td v-for="(v,k) in tabledata.datas[7]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>活动发放成本</td>
+                        <td v-for="(v,k) in tabledata.datas[8]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr class="assessDetail">
+                        <td>实际使用成本</td>
+                        <td v-for="(v,k) in tabledata.datas[9]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr
+                        class="assessDetail"
+                        v-if="tabledata.tasks.length"
+                        v-for="(v,k) in (taskrowspan * 2)"
+                        :key="k">
+                        <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
+                            任务完成
+                        </td>
+                        <td
+                            rowspan="2"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 2 === 0">
+                            {{tabledata.tasks[k / 2].key}}
 
-                    </td>
-                    <td>{{ (k%2) === 0 ? '完成人数' : '完成次数'}}
-                    </td>
-                    <td
-                        v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
-                        {{v}}
-                    </td>
-                </tr>
-                <!-- <tr
-                    class="assessDetail"
-                    v-if="tabledata.resource.length"
-                    v-for="(v,k) in (resourcerowspan * 3)">
-                    <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
-                        资源位转化
-                    </td>
-                    <td
-                        rowspan="3"
-                        style="text-align:center;white-space: nowrap;"
-                        v-if="k % 3 === 0">
-                        {{tabledata.resource[k / 3].key}}
-                    </td>
-                    <td>{{ (k%3) === 0 ? '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}}
-                    </td>
-                    <td
-                        v-for="(v,k) in tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1 ?  'uv_resource_click' : 'rate')]">
-                        {{v}}
-                    </td>
-                </tr> -->
+                        </td>
+                        <td>{{ (k%2) === 0 ? '完成人数' : '完成次数'}}
+                        </td>
+                        <td
+                            v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <tr
+                        class="assessDetail"
+                        v-if="tabledata.h5Datas.length"
+                        v-for="(v,k) in (h5Datasrowspan * 3)"
+                        :key="k">
+                        <td :rowspan="(h5Datasrowspan * 3)" v-if="k === 0">
+                            H5埋点
+                        </td>
+                        <td
+                            rowspan="3"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 3 === 0">
+                            {{tabledata.h5Datas[k / 3].key}}
+                        </td>
+                        <td>{{ (k%3) === 0 ? '每日uv' : ((k%3) === 1 ? '新增uv' : 'pv')}}
+                        </td>
+                        <td
+                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'duv' : ((k%3) === 1 ? 'uv' : 'pv')]">
+                            {{v}}
+                        </td>
+                    </tr>
+                    <!-- <tr class="assessDetail" v-if="tabledata.resource.length" v-for="(v,k) in
+                    (resourcerowspan * 3)"> <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
+                    资源位转化 </td> <td rowspan="3" style="text-align:center;white-space: nowrap;"
+                    v-if="k % 3 === 0"> {{tabledata.resource[k / 3].key}} </td> <td>{{ (k%3) === 0 ?
+                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}} </td> <td v-for="(v,k) in
+                    tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1
+                    ? 'uv_resource_click' : 'rate')]"> {{v}} </td> </tr> -->
 
-            </table>
-        </div>
-        <div class="ant-table-scroll-tip">
-            <div class="ant-table-scroll-tip-horizontal ant-flex">
-                <i class="anticon anticon-right  "></i>
+                </table>
             </div>
+            <div class="ant-table-scroll-tip">
+                <div class="ant-table-scroll-tip-horizontal ant-flex">
+                    <i class="anticon anticon-right  "></i>
+                </div>
+            </div>
+
         </div>
 
-         </div>
-        
-      
         <!-- 加载loading模块 -->
         <div id="ajax-loader" style="display: none;">
             <ul>
@@ -166,30 +177,42 @@
 
 </template>
 <script>
+    import {Notification} from '@u51/miox-vant';
     export default {
         data() {
             return {
                 tabledata: {
                     datas: [],
                     tasks: [],
-                    resource: []
+                    resource: [],
+                    h5Datas: []
                 },
                 taskrowspan: 1,
                 resourcerowspan: 1,
+                h5Datasrowspan: 1,
                 showtable: false
             };
         },
         methods: {
             downreport() {
-                if (process.env.NODE_ENV === 'dev') {
-                    window.open(
-                        `http://numfour.ops-activityeffect.51.env/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
-                    );
-                } else {
-                    window.open(
-                        `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
-                    );
+                if (this.candownloadxls) {
+                    if (process.env.NODE_ENV === 'dev') {
+                        window.open(
+                            `http://numfour.ops-activityeffect.51.env/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
+                        );
+                    } else {
+                        window.open(
+                            `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
+                        );
+                    }
+
+                }else{
+                     Notification.error({
+                    message: '消息提示', description: '成绩单服务器暂不可用～', duration: 4, // 显示时长  单位s
+                });
+
                 }
+
             }
         },
 
@@ -209,12 +232,16 @@
                 .display = 'block';
             // <!-- 加载loading模块 -->
 
-            const respdata = await axios.get(baseURL, {
-                // baseURL: window.$$domain,
-                headers: {
-                    Authorization: window.$$Authorization
-                }
-            });
+            const respdata = await axios
+                .get(baseURL, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization
+                    }
+                })
+                .catch((err) => {
+                    console.log("err", err);
+                });
             document
                 .querySelector('#ajax-loader')
                 .style
@@ -227,6 +254,7 @@
             this.showtable = true;
 
             if (respdata.code === 0) {
+                this.candownloadxls = true;
                 this.tabledata = respdata.data;
                 try {
                     this.taskrowspan = this.tabledata.tasks.length;
@@ -238,8 +266,18 @@
                 } catch (error) {
                     //
                 }
+                try {
+                    this.h5Datasrowspan = this.tabledata.h5Datas.length;
+                } catch (error) {
+                    //
+                }
 
                 this.$forceUpdate();
+            } else {
+                this.candownloadxls = false;
+                Notification.error({
+                    message: '消息提示', description: respdata.message, duration: 4, // 显示时长  单位s
+                });
             }
         }
     };

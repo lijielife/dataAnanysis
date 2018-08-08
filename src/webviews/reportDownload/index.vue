@@ -98,7 +98,8 @@
                             {{v}}
                         </td>
                     </tr>
-                    <tr class="assessDetail"
+                    <tr
+                        class="assessDetail"
                         v-if="tabledata.tasks.length"
                         v-for="(v,k) in (taskrowspan * 2)"
                         :key="k">
@@ -140,30 +141,13 @@
                             {{v}}
                         </td>
                     </tr>
-                    <!-- <tr
-                        class="assessDetail"
-                        v-if="tabledata.resource.length"
-                        v-for="(v,k) in
-                    (resourcerowspan * 3)">
-                        <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
-                            资源位转化
-                        </td>
-                        <td
-                            rowspan="3"
-                            style="text-align:center;white-space: nowrap;"
-                            v-if="k % 3 === 0">
-                            {{tabledata.resource[k / 3].key}}
-                        </td>
-                        <td>{{ (k%3) === 0 ?
-                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}}
-                        </td>
-                        <td
-                            v-for="(v,k) in
+                    <!-- <tr class="assessDetail" v-if="tabledata.resource.length" v-for="(v,k) in
+                    (resourcerowspan * 3)"> <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
+                    资源位转化 </td> <td rowspan="3" style="text-align:center;white-space: nowrap;"
+                    v-if="k % 3 === 0"> {{tabledata.resource[k / 3].key}} </td> <td>{{ (k%3) === 0 ?
+                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}} </td> <td v-for="(v,k) in
                     tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1
-                    ? 'uv_resource_click' : 'rate')]">
-                            {{v}}
-                        </td>
-                    </tr> -->
+                    ? 'uv_resource_click' : 'rate')]"> {{v}} </td> </tr> -->
 
                 </table>
             </div>
@@ -193,6 +177,7 @@
 
 </template>
 <script>
+    import {Notification} from '@u51/miox-vant';
     export default {
         data() {
             return {
@@ -210,15 +195,24 @@
         },
         methods: {
             downreport() {
-                if (process.env.NODE_ENV === 'dev') {
-                    window.open(
-                        `http://numfour.ops-activityeffect.51.env/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
-                    );
-                } else {
-                    window.open(
-                        `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
-                    );
+                if (this.candownloadxls) {
+                    if (process.env.NODE_ENV === 'dev') {
+                        window.open(
+                            `http://numfour.ops-activityeffect.51.env/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
+                        );
+                    } else {
+                        window.open(
+                            `${window.location.origin}/ops-activityeffect/api/v1/downloadTranscript?activityId=${window.$$_ActivityId}`,
+                        );
+                    }
+
+                }else{
+                     Notification.error({
+                    message: '消息提示', description: '成绩单服务器暂不可用～', duration: 4, // 显示时长  单位s
+                });
+
                 }
+
             }
         },
 
@@ -238,12 +232,16 @@
                 .display = 'block';
             // <!-- 加载loading模块 -->
 
-            const respdata = await axios.get(baseURL, {
-                // baseURL: window.$$domain,
-                headers: {
-                    Authorization: window.$$Authorization
-                }
-            });
+            const respdata = await axios
+                .get(baseURL, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization
+                    }
+                })
+                .catch((err) => {
+                    console.log("err", err);
+                });
             document
                 .querySelector('#ajax-loader')
                 .style
@@ -256,6 +254,7 @@
             this.showtable = true;
 
             if (respdata.code === 0) {
+                this.candownloadxls = true;
                 this.tabledata = respdata.data;
                 try {
                     this.taskrowspan = this.tabledata.tasks.length;
@@ -274,6 +273,11 @@
                 }
 
                 this.$forceUpdate();
+            } else {
+                this.candownloadxls = false;
+                Notification.error({
+                    message: '消息提示', description: respdata.message, duration: 4, // 显示时长  单位s
+                });
             }
         }
     };

@@ -100,11 +100,15 @@
                     </tr>
                     <tr class="assessDetail"
                         v-if="tabledata.tasks.length"
-                        v-for="(v,k) in (taskrowspan * 2)" :key="k">
+                        v-for="(v,k) in (taskrowspan * 2)"
+                        :key="k">
                         <td :rowspan="(taskrowspan * 2)" v-if="k === 0">
                             任务完成
                         </td>
-                        <td rowspan="2" style="text-align:center;white-space: nowrap;" v-if="k % 2 === 0">
+                        <td
+                            rowspan="2"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 2 === 0">
                             {{tabledata.tasks[k / 2].key}}
 
                         </td>
@@ -115,30 +119,51 @@
                             {{v}}
                         </td>
                     </tr>
-                         <tr class="assessDetail"
+                    <tr
+                        class="assessDetail"
                         v-if="tabledata.h5Datas.length"
-                        v-for="(v,k) in (h5Datasrowspan * 2)" :key="k">
-                        <td :rowspan="(h5Datasrowspan * 2)" v-if="k === 0">
+                        v-for="(v,k) in (h5Datasrowspan * 3)"
+                        :key="k">
+                        <td :rowspan="(h5Datasrowspan * 3)" v-if="k === 0">
                             H5埋点
                         </td>
-                        <td rowspan="2" style="text-align:center;white-space: nowrap;" v-if="k % 2 === 0">
-                            {{tabledata.h5Datas[k / 2].key}}
-
+                        <td
+                            rowspan="3"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 3 === 0">
+                            {{tabledata.h5Datas[k / 3].key}}
                         </td>
-                        <td>{{ (k%2) === 0 ? '曝光UV' : '曝光PV'}}
+                        <td>{{ (k%3) === 0 ? '曝光UV' : ((k%3) === 1 ? '曝光DUV' : '曝光PV')}}
                         </td>
                         <td
-                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 2)][ (k%2) === 0 ? 'uv' : 'pv']">
+                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'uv' : ((k%3) === 1 ? 'duv' : 'pv')]">
                             {{v}}
                         </td>
                     </tr>
-                    <!-- <tr class="assessDetail" v-if="tabledata.resource.length" v-for="(v,k) in
-                    (resourcerowspan * 3)"> <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
-                    资源位转化 </td> <td rowspan="3" style="text-align:center;white-space: nowrap;"
-                    v-if="k % 3 === 0"> {{tabledata.resource[k / 3].key}} </td> <td>{{ (k%3) === 0 ?
-                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}} </td> <td v-for="(v,k) in
+                    <!-- <tr
+                        class="assessDetail"
+                        v-if="tabledata.resource.length"
+                        v-for="(v,k) in
+                    (resourcerowspan * 3)">
+                        <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
+                            资源位转化
+                        </td>
+                        <td
+                            rowspan="3"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 3 === 0">
+                            {{tabledata.resource[k / 3].key}}
+                        </td>
+                        <td>{{ (k%3) === 0 ?
+                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}}
+                        </td>
+                        <td
+                            v-for="(v,k) in
                     tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1
-                    ? 'uv_resource_click' : 'rate')]"> {{v}} </td> </tr> -->
+                    ? 'uv_resource_click' : 'rate')]">
+                            {{v}}
+                        </td>
+                    </tr> -->
 
                 </table>
             </div>

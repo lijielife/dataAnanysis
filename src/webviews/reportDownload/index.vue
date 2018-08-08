@@ -133,10 +133,10 @@
                             v-if="k % 3 === 0">
                             {{tabledata.h5Datas[k / 3].key}}
                         </td>
-                        <td>{{ (k%3) === 0 ? '曝光UV' : ((k%3) === 1 ? '曝光DUV' : '曝光PV')}}
+                        <td>{{ (k%3) === 0 ? '每日uv' : ((k%3) === 1 ? '新增uv' : 'pv')}}
                         </td>
                         <td
-                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'uv' : ((k%3) === 1 ? 'duv' : 'pv')]">
+                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'duv' : ((k%3) === 1 ? 'uv' : 'pv')]">
                             {{v}}
                         </td>
                     </tr>

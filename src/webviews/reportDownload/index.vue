@@ -54,7 +54,7 @@
                     </tr>
                     <tr class="assessDetail">
 
-                        <td>奖品奖品人数</td>
+                        <td>奖品使用人数</td>
                         <td v-for="(v,k) in tabledata.datas[3]">
                             {{v}}
                         </td>

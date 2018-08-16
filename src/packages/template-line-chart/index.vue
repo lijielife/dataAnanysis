@@ -8,7 +8,7 @@
                 <div class="overview" v-if="overview">
 
                     <div class="section1">
-                        <div>
+                        <div class="datetip">
                             {{day2text(rangeDate[1])}}
                         </div>
                         <div class="today">

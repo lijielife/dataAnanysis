@@ -55,7 +55,7 @@
                     <tr class="assessDetail">
 
                         <td>奖品使用人数</td>
-                        <td v-for="(v,k) in tabledata.datas[3]">
+                        <td v-for="(v,k) in tabledata.datas[3]" :key="k">
                             {{v}}
                         </td>
                     </tr>
@@ -137,18 +137,33 @@
                         <td>{{ (k%3) === 0 ? '每日uv' : ((k%3) === 1 ? '新增uv' : 'pv')}}
                         </td>
                         <td
-                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'duv' : ((k%3) === 1 ? 'uv' : 'pv')]">
+                            v-for="(v,k) in tabledata.h5Datas[parseInt(k / 3)][(k%3) === 0 ? 'duv' : ((k%3) === 1 ? 'uv' : 'pv')]"
+                            :key="k">
                             {{v}}
                         </td>
                     </tr>
-                    <!-- <tr class="assessDetail" v-if="tabledata.resource.length" v-for="(v,k) in
-                    (resourcerowspan * 3)"> <td :rowspan="(resourcerowspan * 3)" v-if="k === 0">
-                    资源位转化 </td> <td rowspan="3" style="text-align:center;white-space: nowrap;"
-                    v-if="k % 3 === 0"> {{tabledata.resource[k / 3].key}} </td> <td>{{ (k%3) === 0 ?
-                    '曝光UV' : ((k%3) === 1 ? '点击UV' : '转化率')}} </td> <td v-for="(v,k) in
-                    tabledata.resource[parseInt(k / 3)][ (k%3) === 0 ? 'uv_resource' : ((k%3) === 1
-                    ? 'uv_resource_click' : 'rate')]"> {{v}} </td> </tr> -->
-
+                    <tr
+                        class="assessDetail"
+                        v-if="tabledata.resource.length"
+                        v-for="(v,k) in (resourcerowspan * 4)"
+                        :key="k">
+                        <td :rowspan="(resourcerowspan * 4)" v-if="k === 0">
+                           资源位投放
+                        </td>
+                        <td
+                            rowspan="4"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 4 === 0">
+                            {{tabledata.resource[k / 4].key}}
+                        </td>
+                        <td>{{ (k%4) === 0 ? '曝光pv' : ((k%4) === 1 ? '每日曝光pv' : (k%4) === 2 ? '点击pv' : '每日点击pv')}}
+                        </td>
+                        <td
+                            v-for="(v,k) in tabledata.resource[parseInt(k / 4)][(k%4) === 0 ? 'pv_resource' : ((k%4) === 1 ? 'duv_resource' : ((k%4) === 2 ? 'pv_resource_click' : 'duv_resource_click'))]"
+                            :key="k">
+                            {{v}}
+                        </td>
+                    </tr>
                 </table>
             </div>
             <div class="ant-table-scroll-tip">
@@ -206,10 +221,10 @@
                         );
                     }
 
-                }else{
-                     Notification.error({
-                    message: '消息提示', description: '成绩单服务器暂不可用～', duration: 4, // 显示时长  单位s
-                });
+                } else {
+                    Notification.error({
+                        message: '消息提示', description: '成绩单服务器暂不可用～', duration: 4, // 显示时长  单位s
+                    });
 
                 }
 

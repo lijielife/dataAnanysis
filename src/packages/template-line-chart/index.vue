@@ -155,7 +155,7 @@
                 return eval(val);
             },
             getOverview() {
-                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}&isTPlus=${this.mianTitleAndId.isTPlusone}`;
+                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}&isTPlus=${this.mianTitleAndId.tplusone}`;
                 // const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
                 axios
                     .get(baseURL, {

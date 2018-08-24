@@ -156,7 +156,7 @@
                             v-if="k % 4 === 0">
                             {{tabledata.resource[k / 4].key}}
                         </td>
-                        <td>{{ (k%4) === 0 ? '曝光pv' : ((k%4) === 1 ? '每日曝光pv' : (k%4) === 2 ? '点击pv' : '每日点击pv')}}
+                        <td>{{ (k%4) === 0 ? '曝光pv' : ((k%4) === 1 ? '每日曝光uv' : (k%4) === 2 ? '点击pv' : '每日点击uv')}}
                         </td>
                         <td
                             v-for="(v,k) in tabledata.resource[parseInt(k / 4)][(k%4) === 0 ? 'pv_resource' : ((k%4) === 1 ? 'duv_resource' : ((k%4) === 2 ? 'pv_resource_click' : 'duv_resource_click'))]"

@@ -75,6 +75,9 @@
                     this.toshow();
                 }
             },
+            mianTitleAndId(){
+                 this.toshow();
+            }
         },
         props: [
             'timeranger', 'mianTitleAndId',
@@ -180,6 +183,7 @@
 
             async toshow() {
                 this.hasshow = 1;
+                console.log('this.rangeDate',this.rangeDate)
                 await this.getDateStream(this.rangeDate); // 先把数据拿到
                 this.dwd();
                 this.drawAccessDataLines();
@@ -211,7 +215,11 @@
             },
 
             async getDateStream(startAndend) {
-                this.getOverview();
+                if(!this.mianTitleAndId.needgetOverview){
+                      this.getOverview();
+
+                }
+              
                 const id = this.mianTitleAndId.mountedId;
                 if (!this.myChart) {
                     this.myChart = window
@@ -232,14 +240,22 @@
                     }
                     this.rangeDate[0] = new Date(startAndend[0]);
                     this.rangeDate[1] = new Date(startAndend[1]);
+                  
                     start = formatDateTime(startAndend[0], 6);
                     end = formatDateTime(startAndend[1], 6);
-                    const startAndendStr = `&start=${start}&end=${end}`;
-                    baseURL += `${startAndendStr}`;
+
+
+                    const startAndendStr = `start=${start}&end=${end}`;
+                   baseURL += `&${startAndendStr}`;
+                 
                 } else {
                     baseURL += `${startAndend}`;
                 }
-                baseURL += `&sourceItem=${this.mianTitleAndId.sourceItem}`;
+                if(!this.mianTitleAndId.needgetOverview){
+                     baseURL += `&sourceItem=${this.mianTitleAndId.sourceItem}`;
+                }
+             
+              
                 const respdata = await axios.get(baseURL, {
                     // baseURL: window.$$domain,
                     headers: {
@@ -291,7 +307,9 @@
                 this.groups = this.options.groups;
                 this.quota = this.options.quota;
                 this.summary = this.options.summary;
+               
                 this.data = this.options.data;
+
                 this.subQuota = this.options.subQuota;
                 this.xAxis = [];
                 this.hint = this.options.hints;
@@ -464,13 +482,19 @@
                             .push(temp);
                     });
                 }
+             
+
             },
             // 构建格式化的数据坐标对象
             toCreateFormatObj() {
+
                 const keys = this.legendKey;
+     
                 const len = keys.length;
+         
                 const groups = this.groups;
                 const groupsLen = groups.length;
+               
                 for (let i = 0; i < len; i++) {
                     this.formatDatas[keys[i]] = {};
                     this.suppleformatDatas[keys[i]] = {};
@@ -827,7 +851,7 @@
                                 const itemKey = keyitem[groupid][0].itemKey;
                                 const dupxvalue = keyitem[groupid][0].xvalue;
                                 const other = {};
-
+                                
                                 const temp = {
                                     xvalue: dupxvalue,
                                     yvalue: keyitem[groupid][0].yvalue * 100,

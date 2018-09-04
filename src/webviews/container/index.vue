@@ -18,14 +18,14 @@
             :selectKey="menuSelectKey"
             @menuChange="syetemMenuChange"></system-menu>
         <system-breadcrumb slot="breadcrumb" :breadPath="breadPath"></system-breadcrumb>
-        
+
     </system-layout>
 </template>
 
 <script>
     import '@u51/miox-vant/packages/style/index.less';
-    import { Component, life } from 'miox-vue2x-classify';
-    import { mapActions, mapGetters } from 'vuex';
+    import {Component, life} from 'miox-vue2x-classify';
+    import {mapActions, mapGetters} from 'vuex';
     import Engine from 'miox-vue2x';
     import store from '../../webstore/index';
     import templateLayout from '../../packages/template-layout';
@@ -42,7 +42,7 @@
             'system-menu': templateMenu,
             'system-userInfo': templateUserInfo,
             'system-breadcrumb': templateBreadcrumb,
-            'system-tabs': templateTabs,
+            'system-tabs': templateTabs
         },
         methods: {
             ...mapActions(['getUserInfo', 'getMenus']),
@@ -79,7 +79,7 @@
                 this
                     .$store
                     .commit('delALLTab');
-            },
+            }
         },
         computed: {
             ...mapGetters({
@@ -89,15 +89,29 @@
                 userInfo: 'getUserInfo',
                 breadPath: 'getBreadcrumb',
                 tabList: 'getTabList',
-                isHideInlieSubmenu: 'getHideInlieSubmenuStatus',
-            }),
-        },
+                isHideInlieSubmenu: 'getHideInlieSubmenuStatus'
+            })
+        }
     })
     export default class Wrap extends Engine.WebView {
         @life mounted() {
             // 异步获取用户信息和菜单信息
             this.getMenus();
             this.getUserInfo();
+
+            var url = `${window.$$commonPath}/api/v1/manager/effect/summary/isShow`;
+            axios
+                .get(url, {
+                    // baseURL: window.$$domain,
+                    headers: {
+                        Authorization: window.$$Authorization
+                    }
+                })
+                .then((res) => {
+                   if(!res.data){
+                    document.querySelector(".anticon-database").parentNode.style.display = "none";
+                   }
+                });
 
             // 监听全屏事件
             document.addEventListener('fullscreenchange', () => {

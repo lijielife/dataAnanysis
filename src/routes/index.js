@@ -69,4 +69,14 @@ route.patch('/bank-view', async (ctx) => {
     });
     await ctx.render(inner.default);
 });
+
+route.patch('/overall-database', async (ctx) => {
+    const inner = await new Promise((resolve) => {
+        require.ensure([], (require) => {
+            resolve(require('../webviews/overallDatabase/index.vue'));
+        });
+    });
+    await ctx.render(inner.default);
+});
+
 export default route;

@@ -54,6 +54,12 @@ const sideMenuData = [
         res_type: 'view',
         uri: '/funnel-analyze',
     },
+    {
+        describe: '数据大盘',
+        icon: 'database',
+        res_type: 'view',
+        uri: '/overall-database',
+    },
     // {
     //     describe: '人群分析',
     //     icon: 'usergroup-add',

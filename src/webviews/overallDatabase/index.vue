@@ -368,7 +368,6 @@
         },
         watch: {
             items() {
-                console.log('执行动画')
                 this.animation4num();
             },
             select(next) {

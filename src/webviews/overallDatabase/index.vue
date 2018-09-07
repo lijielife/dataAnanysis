@@ -45,12 +45,12 @@
                     <a data-toggle="tab" href="#tab-0" aria-expanded="false">
                         <div class="ds-title">{{v.name}}</div>
                         <div>
-                            <span class="ds-num1" :id="v.tpid">0</span>
+                            <span class="ds-num1" :id="v.tpid"></span>
                             <span class="ds-num1 ds-tp"></span>
                         </div>
                         <div class="ds-num2">
-                            <span>{{v.monthTotal}}:</span>
-                            <span :id="v.leijiid">0</span>
+                            <span v-if="v.monthTotal">{{v.monthTotal}}:</span>
+                            <span :id="v.leijiid"></span>
                             <span class="ds-tp"></span>
                         </div>
                     </a>

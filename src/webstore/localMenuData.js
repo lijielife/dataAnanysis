@@ -61,10 +61,10 @@ const sideMenuData = [
         uri: '/overall-database',
     },
     // {
-    //     describe: '人群分析',
+    //     describe: '数据报告上传',
     //     icon: 'usergroup-add',
     //     res_type: 'view',
-    //     uri: '/user-info3',
+    //     uri: '/res-upload',
     // },
     // {
     //     describe: '首页',

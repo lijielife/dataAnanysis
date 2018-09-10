@@ -5,13 +5,13 @@
                 <nb-badge status="processing" text="汇总数据有1H延迟。"></nb-badge>
             </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;align-items:center">
+        <div style="display:flex;justify-content:flex-end;align-items:center" v-if="hasAccess">
             <nb-icon
                 @click="downreport"
                 type="cloud-download"
                 style="cursor:pointer;color:#00BBFF;width:40px;height:30px;font-size:28px;margin-right:30px"></nb-icon>
         </div>
-        <div style="position:relative;width:100%;overflow:hidden;margin-bottom:60px">
+        <div style="position:relative;width:100%;overflow:hidden;margin-bottom:60px" v-if="hasAccess">
             <div style="width:100%;overflow-x:auto;position:relative" v-show="showtable">
                 <table class="mytable">
                     <tr>
@@ -173,6 +173,7 @@
             </div>
 
         </div>
+        <div class="el-alert info-403 el-alert--warning" v-else><i class="el-alert__icon el-icon-warning is-big"></i><div class="el-alert__content"><span class="el-alert__title is-bold">没有权限访问此菜单或服务，请通过以下地址申请。</span><p>需要权限添加请联系：程云(chengyun@u51.com)</p><i class="el-alert__closebtn el-icon-close" style="display: none;"></i></div></div>
         <!-- 加载loading模块 -->
         <div id="ajax-loader" style="display: none;">
             <ul>
@@ -204,7 +205,8 @@
                 taskrowspan: 1,
                 resourcerowspan: 1,
                 h5Datasrowspan: 1,
-                showtable: false
+                showtable: false,
+                hasAccess:true
             };
         },
         methods: {
@@ -231,9 +233,6 @@
         },
 
         async mounted() {
-            // document.getElementById('ajax-loader').style.display = 'block';
-            // document.getElementById('mask').style.display = 'block';
-
             const baseURL = `${window.$$commonPath}/api/v1/manager/effect/action/transcriptTable?activityId=${window.$$_ActivityId}`;
             // <!-- 加载loading模块 -->
             document
@@ -254,7 +253,8 @@
                     }
                 })
                 .catch((err) => {
-                    console.log("err", err);
+                    this.hasAccess = false;
+                    console.log("err====》", err);
                 });
             document
                 .querySelector('#ajax-loader')
@@ -266,6 +266,7 @@
                 .display = 'none';
 
             this.showtable = true;
+            console.log()
 
             if (respdata.code === 0) {
                 this.candownloadxls = true;
@@ -540,4 +541,78 @@
             background-color: #FFF;
         }
     }
+    .info-403 {
+    margin-top: 40px;
+    background-color: rgba(247,186,41,.15);
+    color: #f7ba2a;
+}
+.el-alert {
+    width: 100%;
+    padding: 8px 16px;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    position: relative;
+    background-color: #fff;
+    overflow: hidden;
+     color: #f7ba2a;
+    opacity: 1;
+    display: table;
+    -webkit-transition: opacity .2s;
+    transition: opacity .2s;
+}
+body {
+    font-size: 1.4rem;
+    margin: 0;
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+.info-403 .el-alert__icon {
+    color: #f7ba2a;
+    font-size: 30px;
+}
+.el-alert__icon.is-big {
+    font-size: 28px;
+    width: 28px;
+}
+.el-alert__icon {
+    font-size: 16px;
+    width: 16px;
+    display: table-cell;
+    color: #f7ba2a;
+    vertical-align: middle;
+}
+[class*=" el-icon-"], [class^=el-icon-] {
+    font-family: element-icons!important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: baseline;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.el-icon-warning:before {
+    content: "\E623";
+}
+.el-alert__content {
+    display: table-cell;
+    padding: 0 8px;
+}
+.el-alert__closebtn {
+    font-size: 12px;
+    color: #f7ba2a;
+    opacity: 1;
+    top: 12px;
+    right: 15px;
+    position: absolute;
+    cursor: pointer;
+}
 </style>

@@ -2,6 +2,7 @@
     <div class="user-info">
         <nav class="stroke">
             <ul>
+                 
                 <li>
                     <a
                        @click="go2old">

@@ -19,6 +19,16 @@ route.patch('/cg-data-overview', async (ctx) => {
     await ctx.render(inner.default);
 });
 
+route.patch('/aggregate-data', async (ctx) => {
+    const inner = await new Promise((resolve) => {
+        require.ensure([], (require) => {
+            resolve(require('../webviews/dataPreview/index.vue'));
+        });
+    });
+    await ctx.render(inner.default);
+});
+
+
 
 route.patch('/be-data-overview', async (ctx) => {
     const inner = await new Promise((resolve) => {
@@ -78,5 +88,15 @@ route.patch('/overall-database', async (ctx) => {
     });
     await ctx.render(inner.default);
 });
+
+route.patch('/res-upload', async (ctx) => {
+    const inner = await new Promise((resolve) => {
+        require.ensure([], (require) => {
+            resolve(require('../webviews/resUpload/index.vue'));
+        });
+    });
+    await ctx.render(inner.default);
+});
+
 
 export default route;

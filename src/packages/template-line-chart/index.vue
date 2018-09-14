@@ -158,7 +158,12 @@
                 return eval(val);
             },
             getOverview() {
-                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}&isTPlus=${this.mianTitleAndId.tplusone}`;
+                var endTime = '';
+                
+                if(Array.isArray(this.timeranger)&&this.timeranger.length){
+                   endTime =  formatDateTime(this.timeranger[1],6);
+                }
+                const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}&sourceItem=${this.mianTitleAndId.sourceItem}&isTPlus=${this.mianTitleAndId.tplusone}&&endTime=${endTime}`;
                 // const baseURL = `${window.$$commonPath}/api/v1/manager/effect/summary/simple?activityId=${window.$$_ActivityId}&category=${this.mianTitleAndId.name}`;
                 axios
                     .get(baseURL, {

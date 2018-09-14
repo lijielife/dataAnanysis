@@ -276,6 +276,8 @@
                 } else if (/cg-data-overview/.test(location.hash)) {
                     quota = 'front';
                     this.tplus1 = true;
+                } else if(/aggregate-data/.test(location.hash)){
+                     quota = 'aggregate';
                 }
                 axios
                     .get(

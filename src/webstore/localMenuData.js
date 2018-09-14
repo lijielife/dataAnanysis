@@ -46,6 +46,12 @@ const sideMenuData = [
                 res_type: 'view',
                 uri: '/report-download',
             },
+            {
+                describe: '聚合数据',
+                icon: 'appstore-o',
+                uri: '/aggregate-data',
+                res_type: 'view',
+            },
         ],
     },
     {

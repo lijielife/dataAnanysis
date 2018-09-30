@@ -27,7 +27,7 @@
                             {{ (v.value) }}
                         </th>
                     </tr>
-                    <tr class="assessDetail">
+                    <!-- <tr class="assessDetail">
                         <td rowspan="10">
                             活动基础数据
                         </td>
@@ -119,7 +119,7 @@
                             v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
                             {{v}}
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr
                         class="assessDetail"
                         v-if="tabledata.h5Datas.length"

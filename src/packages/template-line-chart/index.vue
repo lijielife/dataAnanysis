@@ -34,7 +34,7 @@
                                 <span>{{overview.yesterdayNow.desc}}:</span>
                                 {{ overview.yesterdayNow.value}}{{ overview.unit.value }}</p>
                             <p>
-                                <span>{{overview.total.desc}}:</span>
+                                <span style="font-weight:bolder">{{overview.total.desc}}:</span>
                                 {{ overview.total.value}}{{ overview.unit.value }}
                             </p>
                         </div>

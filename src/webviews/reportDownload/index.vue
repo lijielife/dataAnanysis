@@ -200,7 +200,7 @@
                             >
                             {{tabledata.moneyEvents[kk].key}}
                         </td>
-                        <td>pv</td>
+                        <td>金额类(单位:元)</td>
                         <td
                             v-for="(v,k) in tabledata.moneyEvents[kk]['pv']"
                             :key="k">

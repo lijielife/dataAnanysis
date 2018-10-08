@@ -40,17 +40,18 @@ const sideMenuData = [
                 res_type: 'view',
                 uri: '/benefit-analysis',
             },
-            {
-                describe: '汇总数据报告',
-                icon: 'file-excel',
-                res_type: 'view',
-                uri: '/report-download',
-            },
+           
             {
                 describe: '聚合数据',
                 icon: 'appstore-o',
                 uri: '/aggregate-data',
                 res_type: 'view',
+            },
+            {
+                describe: '汇总数据报告',
+                icon: 'file-excel',
+                res_type: 'view',
+                uri: '/report-download',
             },
         ],
     },

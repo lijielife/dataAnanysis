@@ -27,7 +27,7 @@
                             {{ (v.value) }}
                         </th>
                     </tr>
-                    <tr class="assessDetail">
+                    <!-- <tr class="assessDetail">
                         <td rowspan="10">
                             活动基础数据
                         </td>
@@ -119,7 +119,7 @@
                             v-for="(v,k) in tabledata.tasks[parseInt(k / 2)][ (k%2) === 0 ? 'uv_finishTask' : 'pv_finishTask']">
                             {{v}}
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr
                         class="assessDetail"
                         v-if="tabledata.h5Datas.length"
@@ -164,6 +164,49 @@
                             {{v}}
                         </td>
                     </tr>
+                    <tr
+                        class="assessDetail"
+                        v-if="tabledata.serverEvents.length"
+                        v-for="(v,k) in (serverEventsrowspan * 3)"
+                        :key="k">
+                        <td :rowspan="(serverEventsrowspan * 3)" v-if="k === 0">
+                            服务器埋点
+                        </td>
+                        <td
+                            rowspan="3"
+                            style="text-align:center;white-space: nowrap;"
+                            v-if="k % 3 === 0">
+                            {{tabledata.serverEvents[k / 3].key}}
+                        </td>
+                        <td>{{ (k%3) === 0 ? '每日uv' : ((k%3) === 1 ? '新增uv' : 'pv')}}
+                        </td>
+                        <td
+                            v-for="(v,k) in tabledata.serverEvents[parseInt(k / 3)][(k%3) === 0 ? 'duv' : ((k%3) === 1 ? 'uv' : 'pv')]"
+                            :key="k">
+                            {{v}}
+                        </td>
+                    </tr>
+                      <tr
+                        class="assessDetail"
+                        v-if="tabledata.moneyEvents.length"
+                        v-for="(v,kk) in (moneyEventsrowspan * 1)"
+                        :key="kk">
+                        <td :rowspan="(moneyEventsrowspan * 1)" v-if="kk === 0">
+                            效益概览
+                        </td>
+                        <td
+                            rowspan="1"
+                            style="text-align:center;white-space: nowrap;"
+                            >
+                            {{tabledata.moneyEvents[kk].key}}
+                        </td>
+                        <td>金额类(单位:元)</td>
+                        <td
+                            v-for="(v,k) in tabledata.moneyEvents[kk]['pv']"
+                            :key="k">
+                            {{v}}
+                        </td>
+                    </tr>
                 </table>
             </div>
             <div class="ant-table-scroll-tip">
@@ -200,11 +243,15 @@
                     datas: [],
                     tasks: [],
                     resource: [],
-                    h5Datas: []
+                    h5Datas: [],
+                    serverEvents:[],
+                    moneyEvents:[],
                 },
                 taskrowspan: 1,
                 resourcerowspan: 1,
                 h5Datasrowspan: 1,
+                serverEventsrowspan:1,
+                moneyEventsrowspan:1,
                 showtable: false,
                 hasAccess:true
             };
@@ -286,7 +333,18 @@
                 } catch (error) {
                     //
                 }
-
+                    try {
+                    this.serverEventsrowspan = this.tabledata.serverEvents.length;
+                } catch (error) {
+                    //
+                }
+                     try {
+                    this.moneyEventsrowspan = this.tabledata.moneyEvents.length;
+                } catch (error) {
+                    //
+                }
+                
+              
                 this.$forceUpdate();
             } else {
                 this.candownloadxls = false;

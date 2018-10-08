@@ -34,7 +34,7 @@
                                 <span>{{overview.yesterdayNow.desc}}:</span>
                                 {{ overview.yesterdayNow.value}}{{ overview.unit.value }}</p>
                             <p>
-                                <span>{{overview.total.desc}}:</span>
+                                <span style="font-weight:bolder">{{overview.total.desc}}:</span>
                                 {{ overview.total.value}}{{ overview.unit.value }}
                             </p>
                         </div>
@@ -536,10 +536,14 @@
                 const allDatasArrLen = data.length;
                 this.xAxis.length = 0;
                 const xAxis = [];
+
                 for (let i = 0; i < allDatasArrLen; i++) {
                     const item = data[i];
                     const itemKey = item.itemKey;
                     const groupId = item.groupId;
+                    console.log('this.formatDatas[itemKey][groupId]',this
+                        .formatDatas[itemKey][groupId],itemKey,groupId);
+                        
                     this
                         .formatDatas[itemKey][groupId]
                         .push(item);

@@ -29,15 +29,19 @@
     }
     nav ul li {
         display: flex;
+        min-width: 120px;
+        margin: 0;
+        padding: 0;
     }
     nav ul li a {
         display: block;
         text-decoration: none;
         font-weight: 800;
         text-transform: uppercase;
-        margin: 0 30px;
+        margin: 0 12px !important;
         font-size: 14px;
         color: #888;
+
     }
     nav ul li a,
     nav ul li a:after,

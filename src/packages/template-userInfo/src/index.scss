@@ -49,6 +49,10 @@
     }
 
     /* stroke */
+    .stroke{
+        min-width: 500px;
+        float: right;
+    }
     nav.stroke ul li a {
         position: relative;
     }

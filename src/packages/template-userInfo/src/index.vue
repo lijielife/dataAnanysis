@@ -2,10 +2,14 @@
     <div class="user-info">
         <nav class="stroke">
             <ul>
-                 
                 <li>
-                    <a
-                       @click="go2old">
+                    <a @click="go2wiki">
+                        我要圈人<nb-tag color="#f50" style="margin:0 10px 10px 0;">NEW</nb-tag>
+                    </a>
+                </li>
+
+                <li>
+                    <a @click="go2old">
                         <nb-icon type="swap"></nb-icon>&nbsp;返回旧版
                     </a>
                 </li>
@@ -65,8 +69,13 @@
             }
         },
         methods: {
-            go2old(){
-                window.open(`http://opsplate.u51-inc.com/index.html?activityId=${window.$$_ActivityId}`);
+            go2old() {
+                window.open(
+                    `http://opsplate.u51-inc.com/index.html?activityId=${window.$$_ActivityId}`
+                );
+            },
+            go2wiki() {
+                window.open(`http://wiki.51.nb/pages/viewpage.action?pageId=69275363`);
             },
             questionModal() {
                 modal.warning(

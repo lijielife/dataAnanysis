@@ -4,7 +4,7 @@
             <ul>
                 <li>
                     <a @click="go2wiki">
-                        我要圈人<nb-tag color="#f50" style="margin:0 10px 10px 0;">NEW</nb-tag>
+                        我要圈人<nb-tag color="#f50" style="margin:0 10px 10px 0;height:18px;font-size:12px;">new</nb-tag>
                     </a>
                 </li>
 
@@ -20,11 +20,11 @@
                         <nb-icon type="question-circle-o"></nb-icon>&nbsp;帮助文档
                     </a>
                 </li>
-                <!-- <li>
+                <li>
 
                     <a @click="questionModal">
                         <nb-icon type="message"></nb-icon>&nbsp;问题反馈</a>
-                </li> -->
+                </li>
             </ul>
         </nav>
         <!-- <div id="user-info__area"> <nb-dropdown placement="bottom-right"

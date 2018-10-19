@@ -313,7 +313,7 @@
                 .display = 'none';
 
             this.showtable = true;
-            console.log()
+         
 
             if (respdata.code === 0) {
                 this.candownloadxls = true;

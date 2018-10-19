@@ -188,7 +188,6 @@
 
             async toshow() {
                 this.hasshow = 1;
-                console.log('this.rangeDate',this.rangeDate)
                 await this.getDateStream(this.rangeDate); // 先把数据拿到
                 this.dwd();
                 this.drawAccessDataLines();

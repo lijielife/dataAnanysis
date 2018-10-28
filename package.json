@@ -1,8 +1,7 @@
 {
   "name": "fe-template-miox-pc",
   "version": "1.0.0",
-  "description": "供前端部后台组创建公司后台相关系统使用",
-  "author": "尹博文",
+  "author": "huenchao",
   "license": "MIT",
   "service": {
     "port": 7788,
